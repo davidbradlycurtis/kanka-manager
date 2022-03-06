@@ -1,0 +1,340 @@
+###################################################################
+!!python/object:kankaclient.entity.Character
+age: '13'
+appearance_entry: []
+appearance_name: []
+entry: <p><br /></p>
+entry_parsed: <p><br /></p>
+family_id: null
+id: 677714
+image: characters/wpFiIAqaTUfTOt6aVUHcXxluzfsxmwcPHu0Wzvmr.png
+image_full: https://images.kanka.io/user/mDjSHSabuCbD6q757gtbvnwoqic=/smart/src/characters%2FwpFiIAqaTUfTOt6aVUHcXxluzfsxmwcPHu0Wzvmr.png?webpfallback
+image_thumb: https://images.kanka.io/user/-RTkK71b7VRSKe5s-pT_WQ4nkQY=/40x40/smart/src/characters%2FwpFiIAqaTUfTOt6aVUHcXxluzfsxmwcPHu0Wzvmr.png?webpfallback
+image_url: null
+is_dead: false
+is_personality_visible: true
+is_private: false
+location_id: null
+name: Veitanda Carminescale (vay-tun-duh)
+personality_entry: []
+personality_name: []
+pronouns: He/Him
+races:
+- 238821
+tags: []
+title: Cook/Fighter
+type: Player Character
+
+###################################################################
+!!python/object:kankaclient.entity.Character
+age: '23'
+appearance_entry: []
+appearance_name: []
+entry: null
+entry_parsed: null
+family_id: null
+id: 677718
+image: characters/1rT7suLam6lpFbiOMLKwKaOR5G9Y0FNwAZ8hvlLw.png
+image_full: https://images.kanka.io/user/k4rQbjbhii5Rz549vilpRTSHG7Q=/smart/src/characters%2F1rT7suLam6lpFbiOMLKwKaOR5G9Y0FNwAZ8hvlLw.png?webpfallback
+image_thumb: https://images.kanka.io/user/rFbZlbaUoZpcF7ZoT1DjRNZTdAI=/40x40/smart/src/characters%2F1rT7suLam6lpFbiOMLKwKaOR5G9Y0FNwAZ8hvlLw.png?webpfallback
+image_url: null
+is_dead: false
+is_personality_visible: true
+is_private: false
+location_id: 614355
+name: Umari Wavespeaker (oo-mar-ee)
+personality_entry: []
+personality_name: []
+pronouns: She/Her
+races:
+- 238817
+tags: []
+title: null
+type: Player Character
+
+###################################################################
+!!python/object:kankaclient.entity.Character
+age: null
+appearance_entry: []
+appearance_name: []
+entry: null
+entry_parsed: null
+family_id: null
+id: 677720
+image: characters/qvqSzWsPV88mToOyYzteGBl3Mw3gQw1t08c3SJHc.jpg
+image_full: https://images.kanka.io/user/zIdX94tlZQGvmVpyCCB1PSDNeDo=/smart/src/characters%2FqvqSzWsPV88mToOyYzteGBl3Mw3gQw1t08c3SJHc.jpg?webpfallback
+image_thumb: https://images.kanka.io/user/iWRzKilzKdTR2WYXaBqH81EOQKE=/40x40/smart/src/characters%2FqvqSzWsPV88mToOyYzteGBl3Mw3gQw1t08c3SJHc.jpg?webpfallback
+image_url: null
+is_dead: false
+is_personality_visible: true
+is_private: false
+location_id: null
+name: Ibier
+personality_entry: []
+personality_name: []
+pronouns: null
+races:
+- 238818
+tags: []
+title: Brute
+type: Player Character
+
+###################################################################
+!!python/object:kankaclient.entity.Character
+age: '35'
+appearance_entry: []
+appearance_name: []
+entry: null
+entry_parsed: null
+family_id: null
+id: 677722
+image: characters/x5J70XzsLx62ky2N7qHkHnwzTIfACdc7fZ4o5doO.png
+image_full: https://images.kanka.io/user/DLjsz4yTbW6oiDqaK3LpuqOmtjQ=/smart/src/characters%2Fx5J70XzsLx62ky2N7qHkHnwzTIfACdc7fZ4o5doO.png?webpfallback
+image_thumb: https://images.kanka.io/user/UvKLU8qgqyfVZrbB6j9BfNb235A=/40x40/smart/src/characters%2Fx5J70XzsLx62ky2N7qHkHnwzTIfACdc7fZ4o5doO.png?webpfallback
+image_url: null
+is_dead: false
+is_personality_visible: true
+is_private: false
+location_id: 614356
+name: Arlin BeastFellow (Are-Lin)
+personality_entry: []
+personality_name: []
+pronouns: He
+races:
+- 238819
+tags: []
+title: Summoner Druid
+type: Player Character
+
+###################################################################
+!!python/object:kankaclient.entity.Character
+age: '34'
+appearance_entry: []
+appearance_name: []
+entry: null
+entry_parsed: null
+family_id: null
+id: 677748
+image: characters/8UtRO3TnEezRAD0F1rR72h26TMABwNQVoj4WxymK.png
+image_full: https://images.kanka.io/user/Qg1IM-J619ezkR4dXedrERETR7Q=/smart/src/characters%2F8UtRO3TnEezRAD0F1rR72h26TMABwNQVoj4WxymK.png?webpfallback
+image_thumb: https://images.kanka.io/user/J-H5j8F1Dia_dKt2hbE9UyEzD4w=/40x40/smart/src/characters%2F8UtRO3TnEezRAD0F1rR72h26TMABwNQVoj4WxymK.png?webpfallback
+image_url: null
+is_dead: false
+is_personality_visible: false
+is_private: false
+location_id: 614356
+name: Vincent Von Hess
+personality_entry: []
+personality_name: []
+pronouns: He/Him
+races:
+- 238848
+tags:
+- 191449
+title: Explorer/Wizard
+type: Player Character
+
+###################################################################
+!!python/object:kankaclient.entity.Character
+age: Late Teens
+appearance_entry: []
+appearance_name: []
+entry: <p><span id="docs-internal-guid-95965011-7fff-5acb-3181-0042b5426b4b"><span
+  style="font-size:12pt;font-family:'Times New Roman';color:rgb(0,0,0);background-color:transparent;">(Al-ex-and-er
+  Doe-pee-oh)</span></span><br /></p>
+entry_parsed: <p><span id="docs-internal-guid-95965011-7fff-5acb-3181-0042b5426b4b"><span
+  style="font-size:12pt;font-family:'Times New Roman';color:rgb(0,0,0);background-color:transparent;">(Al-ex-and-er
+  Doe-pee-oh)</span></span><br /></p>
+family_id: null
+id: 681863
+image: characters/6udVX52M1mSLEGOxwjnQvBuRyQY2GnIcWeWIiu9t.png
+image_full: https://images.kanka.io/user/PgGs3xb7NBgSUcM2uTt380iC96E=/smart/src/characters%2F6udVX52M1mSLEGOxwjnQvBuRyQY2GnIcWeWIiu9t.png?webpfallback
+image_thumb: https://images.kanka.io/user/WfJrQSdRtmVxwWHDh3NsnxL2Xjk=/40x40/smart/src/characters%2F6udVX52M1mSLEGOxwjnQvBuRyQY2GnIcWeWIiu9t.png?webpfallback
+image_url: null
+is_dead: false
+is_personality_visible: true
+is_private: false
+location_id: 614355
+name: Aleksandr V. Doppio IV
+personality_entry: []
+personality_name: []
+pronouns: He/Him
+races:
+- 241220
+tags: []
+title: Warlock
+type: Player Character
+
+###################################################################
+!!python/object:kankaclient.entity.Character
+age: Unknown
+appearance_entry: []
+appearance_name: []
+entry: <p>Female Inquisitor of Marsinna</p><p>Used hand motions with Dameon Silverblood
+  (Half-Orc)</p>
+entry_parsed: <p>Female Inquisitor of Marsinna</p><p>Used hand motions with Dameon
+  Silverblood (Half-Orc)</p>
+family_id: null
+id: 691484
+image: characters/FTqyxYq91PoRb0k1H5wntDl4e6Ii9Ds55e9ntj5h.png
+image_full: https://images.kanka.io/user/d_BIk26OLbgbo_snt9kt0kk4174=/smart/src/characters%2FFTqyxYq91PoRb0k1H5wntDl4e6Ii9Ds55e9ntj5h.png?webpfallback
+image_thumb: https://images.kanka.io/user/sFLQv7TmaxBnxJubK3CYVn_5Tvc=/40x40/smart/src/characters%2FFTqyxYq91PoRb0k1H5wntDl4e6Ii9Ds55e9ntj5h.png?webpfallback
+image_url: null
+is_dead: false
+is_personality_visible: true
+is_private: false
+location_id: 614355
+name: Jemma Brie
+personality_entry: []
+personality_name: []
+pronouns: She/Her
+races:
+- 238817
+tags:
+- 191460
+title: Inquisitor
+type: NPC
+
+###################################################################
+!!python/object:kankaclient.entity.Character
+age: Unknown
+appearance_entry: []
+appearance_name: []
+entry: "<p>Inquisitor of Marsinna</p><p>Decimated Gnome captain who had contraband\_\
+  </p>"
+entry_parsed: "<p>Inquisitor of Marsinna</p><p>Decimated Gnome captain who had contraband\_\
+  </p>"
+family_id: null
+id: 691485
+image: characters/t5ut6IkfjC8rGnUFPDxYoWDEIsPq3YhQtQkcAojt.jpg
+image_full: https://images.kanka.io/user/uXzj4Fqd2S58FZkR1k85tzRyvLE=/smart/src/characters%2Ft5ut6IkfjC8rGnUFPDxYoWDEIsPq3YhQtQkcAojt.jpg?webpfallback
+image_thumb: https://images.kanka.io/user/MBr2q0viUiS4cuR5syOvrHvicJA=/40x40/smart/src/characters%2Ft5ut6IkfjC8rGnUFPDxYoWDEIsPq3YhQtQkcAojt.jpg?webpfallback
+image_url: null
+is_dead: false
+is_personality_visible: true
+is_private: false
+location_id: 614355
+name: Dameon Silverblood
+personality_entry: []
+personality_name: []
+pronouns: He/Him
+races:
+- 245553
+tags:
+- 191460
+title: Inquisitor
+type: NPC
+
+###################################################################
+!!python/object:kankaclient.entity.Character
+age: null
+appearance_entry: []
+appearance_name: []
+entry: <p>Located of the shore of Remport. Finds the eels to be slimy.</p>
+entry_parsed: <p>Located of the shore of Remport. Finds the eels to be slimy.</p>
+family_id: null
+id: 691505
+image: characters/oJvibyUobpr85KvieMojvYUjJLrRji6DfnSF4jFD.jpg
+image_full: https://images.kanka.io/user/-YyPTwF0SzIz-VawZqLoT9MNqYU=/smart/src/characters%2FoJvibyUobpr85KvieMojvYUjJLrRji6DfnSF4jFD.jpg?webpfallback
+image_thumb: https://images.kanka.io/user/s1FiTPWLR3uublZi6oH9G7eIbl4=/40x40/smart/src/characters%2FoJvibyUobpr85KvieMojvYUjJLrRji6DfnSF4jFD.jpg?webpfallback
+image_url: null
+is_dead: false
+is_personality_visible: true
+is_private: false
+location_id: null
+name: Umari's Crab
+personality_entry: []
+personality_name: []
+pronouns: null
+races: []
+tags: []
+title: Gang Leader
+type: NPC Sea Creature
+
+###################################################################
+!!python/object:kankaclient.entity.Character
+age: Mature
+appearance_entry: []
+appearance_name: []
+entry: <p>Owner and keeper of her Inn Henrietta's Hall.<br /><br />Total MILF<br /><br
+  />Has a super cool swivel arm thing that stirs and carries drinks for her.</p>
+entry_parsed: <p>Owner and keeper of her Inn Henrietta's Hall.<br /><br />Total MILF<br
+  /><br />Has a super cool swivel arm thing that stirs and carries drinks for her.</p>
+family_id: null
+id: 698210
+image: characters/621d99cd03cd7_3337ccaed1cf18ef60fc.jpeg
+image_full: https://images.kanka.io/user/NpNoAuEx78DbigSD8dPi32E5Ooo=/smart/src/characters%2F621d99cd03cd7_3337ccaed1cf18ef60fc.jpeg?webpfallback
+image_thumb: https://images.kanka.io/user/2y64FisFfzWXtVcAZmaVAcy47u8=/40x40/smart/src/characters%2F621d99cd03cd7_3337ccaed1cf18ef60fc.jpeg?webpfallback
+image_url: null
+is_dead: false
+is_personality_visible: false
+is_private: false
+location_id: 631944
+name: Henrietta
+personality_entry: []
+personality_name: []
+pronouns: She/Her
+races:
+- 247874
+tags:
+- 191460
+title: Owner
+type: NPC
+
+###################################################################
+!!python/object:kankaclient.entity.Character
+age: Old
+appearance_entry: []
+appearance_name: []
+entry: <p>Wearing fine robes with a strong build, our first contact for Lord Sylas
+  Briarborn</p>
+entry_parsed: <p>Wearing fine robes with a strong build, our first contact for Lord
+  Sylas Briarborn</p>
+family_id: null
+id: 698217
+image: characters/621d86cc6815c_tavson-of-briarbornj.jpeg
+image_full: https://images.kanka.io/user/5L_VaVfzADLXYvjWMgNMriS8G6w=/smart/src/characters%2F621d86cc6815c_tavson-of-briarbornj.jpeg?webpfallback
+image_thumb: https://images.kanka.io/user/j_OTP3UsZpclPeejkZa_DB6deDw=/40x40/smart/src/characters%2F621d86cc6815c_tavson-of-briarbornj.jpeg?webpfallback
+image_url: null
+is_dead: false
+is_personality_visible: false
+is_private: false
+location_id: 614355
+name: Tavson Briarborn
+personality_entry: []
+personality_name: []
+pronouns: He/Him
+races:
+- 247874
+tags:
+- 196317
+title: null
+type: NPC
+
+###################################################################
+!!python/object:kankaclient.entity.Character
+age: Unknown
+appearance_entry: []
+appearance_name: []
+entry: <p>Sickly Lord Sylas Briarborn of Remport. Totally not a vampire.</p>
+entry_parsed: <p>Sickly Lord Sylas Briarborn of Remport. Totally not a vampire.</p>
+family_id: null
+id: 698225
+image: null
+image_full: null
+image_thumb: https://kanka.io/images/defaults/characters_thumb.jpg
+image_url: null
+is_dead: false
+is_personality_visible: true
+is_private: false
+location_id: 614355
+name: Sylas Briarborn
+personality_entry: []
+personality_name: []
+pronouns: He/Him
+races:
+- 247878
+tags: []
+title: Lord
+type: NPC
+

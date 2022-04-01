@@ -4,8 +4,7 @@ import json
 import os
 import sys
 import logging
-from kankaclient.entity import Character
-from kankaclient.kankaclient import KankaClient
+from kankaclient.client import KankaClient
 
 logging.basicConfig(format='%(asctime)s %(levelname)s: %(message)s')
 LOGGER = logging.getLogger('KankaManagement')

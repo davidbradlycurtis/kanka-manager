@@ -7,15 +7,18 @@ from __future__ import absolute_import
 
 import logging
 import time
-from urllib import request
 import requests
-import urllib3
-#from urllib3.exceptions import InsecureRequestWarning
+from typing import Callable
 
-from kankaclient.constants import MAX_ATTEMPTS
+from kankaclient.constants import MAX_ATTEMPTS, GET, PATCH, POST, DELETE, PUT
 
-# Suppress only the single warning from urllib3 needed.
-#urllib3.disable_warnings(category=InsecureRequestWarning)
+_requests = {
+    GET: requests.get,
+    PATCH: requests.post,
+    POST: requests.put,
+    DELETE: requests.patch,
+    PUT: requests.delete
+}
 
 class BaseManager():
     """Base Manager"""
@@ -28,14 +31,13 @@ class BaseManager():
         self.headers = {'Authorization': token, 'Content-type': 'application/json'}
 
 
-
-    def _throttle(self, request, url, headers, body, params):
+    def _throttle(self, request: Callable, throttle: bool, *args: str, **kwargs: str) -> dict:
         """
-        Wraps the provided api request in a retry-loop to catch
-        internal/throttle server errors
+        Wraps the provided 
 
         Args:
-            request (request): the api request
+            request (function): the request (GET/PUSH/CREATE/DELETE...)
+            throttle (bool): enable request throttling
 
         Returns:
             response: the request response
@@ -44,28 +46,30 @@ class BaseManager():
         max_attemps = MAX_ATTEMPTS
         response = None
         while attempt < max_attemps:
-            response = request(url, data=body, params=params)
+            
+            if throttle:
+                time.sleep(.5)
 
-            if str(response.status_code)[0] == '5' :
-                self.logger.error('Failed to connect to Kanka API: Attempt %d', attempt + 1)
-                self.logger.error('Status Code: %d', response.status_code)
-                self.logger.error('Reason: %s', response.reason)
-            else:
+            response = request(*args, **kwargs)
+
+            if response.status_code != 429 :
                 break
 
+            self.logger.debug(f'{response}: Too many requests, trying again')
             time.sleep(5)
             attempt += 1
 
         return response
 
 
-    def _get(self, url, headers=None, params=None):
+    def _request(self, url: str, request: str, throttle: bool=False, headers: dict=None, params: dict=None, **kwargs: str) -> dict:
         """
-        TODO
+        Makes a GET request to the provided url
 
         Args:
-            api_request (request): the api request
             url (str): the request url
+            request (str): the type of request
+            throttle (bool): enable request throttling
             headers (dict, optional): the request headers. Defaults to None.
             params (dict, optional): the request params. Defaults to None.
 
@@ -75,7 +79,7 @@ class BaseManager():
         if headers is None:
             headers = self.headers
 
-        response = requests.get(url=url, headers=headers, params=params)
+        response = self._throttle(_requests.get(request), throttle=throttle, url=url, headers=headers, params=params, **kwargs)
 
         return response
 

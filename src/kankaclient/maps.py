@@ -74,9 +74,9 @@ class MapAPI(BaseManager):
         """
         map = None
         maps = self.get_maps()
-        for map in maps:
-            if map.get('name') == name:
-                map = map
+        for _map in maps:
+            if _map.get('name') == name:
+                map = _map
                 break
 
         if map is None:

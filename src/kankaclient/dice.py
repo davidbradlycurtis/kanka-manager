@@ -74,9 +74,9 @@ class DiceRoleAPI(BaseManager):
         """
         dice_roll = None
         dice_rolls = self.get_dice_rolls()
-        for dice_roll in dice_rolls:
-            if dice_roll.get('name') == name:
-                dice_roll = dice_roll
+        for _dice_roll in dice_rolls:
+            if _dice_roll.get('name') == name:
+                dice_roll = _dice_roll
                 break
 
         if dice_roll is None:

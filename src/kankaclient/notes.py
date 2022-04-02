@@ -74,9 +74,9 @@ class NoteAPI(BaseManager):
         """
         note = None
         notes = self.get_notes()
-        for note in notes:
-            if note.get('name') == name:
-                note = note
+        for _note in notes:
+            if _note.get('name') == name:
+                note = _note
                 break
 
         if note is None:

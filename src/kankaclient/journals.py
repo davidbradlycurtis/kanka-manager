@@ -74,9 +74,9 @@ class JournalAPI(BaseManager):
         """
         journal = None
         journals = self.get_journals()
-        for journal in journals:
-            if journal.get('name') == name:
-                journal = journal
+        for _journal in journals:
+            if _journal.get('name') == name:
+                journal = _journal
                 break
 
         if journal is None:

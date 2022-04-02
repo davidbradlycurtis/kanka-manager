@@ -74,9 +74,9 @@ class QuestAPI(BaseManager):
         """
         quest = None
         quests = self.get_quests()
-        for quest in quests:
-            if quest.get('name') == name:
-                quest = quest
+        for _quest in quests:
+            if _quest.get('name') == name:
+                quest = _quest
                 break
 
         if quest is None:

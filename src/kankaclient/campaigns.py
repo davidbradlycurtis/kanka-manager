@@ -76,9 +76,9 @@ class CampaignAPI(BaseManager):
         """
         campaign = None
         campaigns = self.get_campaigns()
-        for campaign in campaigns:
-            if campaign['name'] == name:
-                campaign = campaign
+        for _campaign in campaigns:
+            if _campaign.get('name') == name:
+                campaign = _campaign
                 break
         
         if campaign is None:
@@ -101,7 +101,7 @@ class CampaignAPI(BaseManager):
         response = self._request(url=self.GET_ALL, request=GET)
 
         if not response.ok:
-            self.logger.error('Failed to retrieve members from campaign: ', self.campaign,get('name'))
+            self.logger.error('Failed to retrieve members from campaign: ', self.campaign.get('name'))
             raise self.KankaException(response.reason, response.status_code, message=response.json())
 
         members = json.loads(response.text).get('data')

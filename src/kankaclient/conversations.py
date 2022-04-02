@@ -74,9 +74,9 @@ class ConversationAPI(BaseManager):
         """
         conversation = None
         conversations = self.get_conversations()
-        for conversation in conversations:
-            if conversation.get('name') == name:
-                conversation = conversation
+        for _conversation in conversations:
+            if _conversation.get('name') == name:
+                conversation = _conversation
                 break
 
         if conversation is None:

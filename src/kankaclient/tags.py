@@ -74,9 +74,9 @@ class TagAPI(BaseManager):
         """
         tag = None
         tags = self.get_tags()
-        for tag in tags:
-            if tag.get('name') == name:
-                tag = tag
+        for _tag in tags:
+            if _tag.get('name') == name:
+                tag = _tag
                 break
 
         if tag is None:

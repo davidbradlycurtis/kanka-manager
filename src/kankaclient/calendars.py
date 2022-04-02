@@ -74,9 +74,9 @@ class CalendarAPI(BaseManager):
         """
         calendar = None
         calendars = self.get_calendars()
-        for calendar in calendars:
-            if calendar.get('name') == name:
-                calendar = calendar
+        for _calendar in calendars:
+            if _calendar.get('name') == name:
+                calendar = _calendar
                 break
 
         if calendar is None:

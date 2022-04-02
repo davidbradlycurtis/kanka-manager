@@ -74,9 +74,9 @@ class CharacterAPI(BaseManager):
         """
         character = None
         characters = self.get_characters()
-        for character in characters:
-            if character.get('name') == name:
-                character = character
+        for _character in characters:
+            if _character.get('name') == name:
+                character = _character
                 break
 
         if character is None:

@@ -74,9 +74,9 @@ class RaceAPI(BaseManager):
         """
         race = None
         races = self.get_races()
-        for race in races:
-            if race.get('name') == name:
-                race = race
+        for _race in races:
+            if _race.get('name') == name:
+                race = _race
                 break
 
         if race is None:

@@ -74,9 +74,9 @@ class OrganizationAPI(BaseManager):
         """
         organization = None
         organizations = self.get_organizations()
-        for organization in organizations:
-            if organization.get('name') == name:
-                organization = organization
+        for _organization in organizations:
+            if _organization.get('name') == name:
+                organization = _organization
                 break
 
         if organization is None:

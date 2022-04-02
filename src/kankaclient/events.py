@@ -74,9 +74,9 @@ class EventAPI(BaseManager):
         """
         event = None
         events = self.get_events()
-        for event in events:
-            if event.get('name') == name:
-                event = event
+        for _event in events:
+            if _event.get('name') == name:
+                event = _event
                 break
 
         if event is None:

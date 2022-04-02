@@ -74,9 +74,9 @@ class FamilyAPI(BaseManager):
         """
         family = None
         families = self.get_families()
-        for family in families:
-            if family.get('name') == name:
-                family = family
+        for _family in families:
+            if _family.get('name') == name:
+                family = _family
                 break
 
         if family is None:

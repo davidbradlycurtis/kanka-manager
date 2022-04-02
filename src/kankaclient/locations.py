@@ -74,9 +74,9 @@ class LocationAPI(BaseManager):
         """
         location = None
         locations = self.get_locations()
-        for location in locations:
-            if location.get('name') == name:
-                location = location
+        for _location in locations:
+            if _location.get('name') == name:
+                location = _location
                 break
 
         if location is None:

@@ -74,9 +74,9 @@ class TimelineAPI(BaseManager):
         """
         timeline = None
         timelines = self.get_timelines()
-        for timeline in timelines:
-            if timeline.get('name') == name:
-                timeline = timeline
+        for _timeline in timelines:
+            if _timeline.get('name') == name:
+                timeline = _timeline
                 break
 
         if timeline is None:

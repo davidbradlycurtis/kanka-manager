@@ -74,9 +74,9 @@ class AbilityAPI(BaseManager):
         """
         ability = None
         abilities = self.get_abilities()
-        for ability in abilities:
-            if ability.get('name') == name:
-                ability = ability
+        for _ability in abilities:
+            if _ability.get('name') == name:
+                ability = _ability
                 break
 
         if ability is None:

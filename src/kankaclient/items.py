@@ -74,9 +74,9 @@ class ItemAPI(BaseManager):
         """
         item = None
         items = self.get_items()
-        for item in items:
-            if item.get('name') == name:
-                item = item
+        for _item in items:
+            if _item.get('name') == name:
+                item = _item
                 break
 
         if item is None:

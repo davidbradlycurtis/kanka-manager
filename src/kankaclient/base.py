@@ -14,10 +14,10 @@ from kankaclient.constants import MAX_ATTEMPTS, GET, PATCH, POST, DELETE, PUT
 
 _requests = {
     GET: requests.get,
-    PATCH: requests.post,
-    POST: requests.put,
-    DELETE: requests.patch,
-    PUT: requests.delete
+    PATCH: requests.patch,
+    POST: requests.post,
+    DELETE: requests.delete,
+    PUT: requests.put
 }
 
 class BaseManager():
@@ -31,7 +31,7 @@ class BaseManager():
         self.headers = {'Authorization': token, 'Content-type': 'application/json'}
 
 
-    def _throttle(self, request: Callable, throttle: bool, *args: str, **kwargs: str) -> dict:
+    def _throttle(self, request: Callable, throttle: bool, **kwargs: str) -> dict:
         """
         Wraps the provided 
 
@@ -50,7 +50,7 @@ class BaseManager():
             if throttle:
                 time.sleep(.5)
 
-            response = request(*args, **kwargs)
+            response = request(**kwargs)
 
             if response.status_code != 429 :
                 break
@@ -62,7 +62,7 @@ class BaseManager():
         return response
 
 
-    def _request(self, url: str, request: str, throttle: bool=False, headers: dict=None, params: dict=None, **kwargs: str) -> dict:
+    def _request(self, url: str, request: str, throttle: bool=False, headers: dict=None, **kwargs: str) -> dict:
         """
         Makes a GET request to the provided url
 
@@ -79,7 +79,7 @@ class BaseManager():
         if headers is None:
             headers = self.headers
 
-        response = self._throttle(_requests.get(request), throttle=throttle, url=url, headers=headers, params=params, **kwargs)
+        response = self._throttle(_requests.get(request), throttle=throttle, url=url, headers=headers, **kwargs)
 
         return response
 

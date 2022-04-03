@@ -24,7 +24,7 @@ class CampaignAPI(BaseManager):
         self.campaigns = None
 
         self.campaign = self.get_campaign(campaign)
-        campaign_id = campaign.get('id')
+        campaign_id = self.campaign.get('id')
 
         global GET_SINGLE
         global GET_MEMBERS

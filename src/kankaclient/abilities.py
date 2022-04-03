@@ -98,7 +98,7 @@ class AbilityAPI(BaseManager):
         Returns:
             ability: the requested ability
         """
-        response = self._request(url=GET_UPDATE_DELETE_SINGLE, request=GET)
+        response = self._request(url=GET_UPDATE_DELETE_SINGLE % id, request=GET)
 
         if not response.ok:
             self.logger.error('Failed to retrieve ability %s from campaign %s', id, self.campaign.get('name'))
@@ -123,7 +123,7 @@ class AbilityAPI(BaseManager):
         Returns:
             ability: the created ability
         """
-        response = self._request(url=GET_UPDATE_DELETE_SINGLE, request=POST, body=ability)
+        response = self._request(url=GET_UPDATE_DELETE_SINGLE, request=POST, data=json.dumps(ability))
 
         if not response.ok:
             self.logger.error('Failed to create ability %s in campaign %s', ability.get('name', 'None'), self.campaign.get('name'))
@@ -148,7 +148,7 @@ class AbilityAPI(BaseManager):
         Returns:
             ability: the updated ability
         """
-        response = self._request(url=GET_UPDATE_DELETE_SINGLE, request=PUT, body=ability)
+        response = self._request(url=GET_UPDATE_DELETE_SINGLE % ability.get('id'), request=PUT, data=json.dumps(ability))
 
         if not response.ok:
             self.logger.error('Failed to update ability %s in campaign %s', ability.get('name', 'None'), self.campaign.get('name'))
@@ -173,11 +173,11 @@ class AbilityAPI(BaseManager):
         Returns:
             bool: whether the ability is successfully deleted
         """
-        response = self._request(url=GET_UPDATE_DELETE_SINGLE, request=DELETE)
+        response = self._request(url=GET_UPDATE_DELETE_SINGLE % id, request=DELETE)
 
         if not response.ok:
             self.logger.error('Failed to delete ability %s in campaign %s', id, self.campaign.get('name'))
             raise self.KankaException(response.reason, response.status_code, message=response.json())
 
-        self.logger.debug(response.json())
+        self.logger.debug(response)
         return True

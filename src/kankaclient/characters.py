@@ -98,7 +98,7 @@ class CharacterAPI(BaseManager):
         Returns:
             character: the requested character
         """
-        response = self._request(url=GET_UPDATE_DELETE_SINGLE, request=GET)
+        response = self._request(url=GET_UPDATE_DELETE_SINGLE % id, request=GET)
 
         if not response.ok:
             self.logger.error('Failed to retrieve character %s from campaign %s', id, self.campaign.get('name'))
@@ -123,7 +123,7 @@ class CharacterAPI(BaseManager):
         Returns:
             character: the created character
         """
-        response = self._request(url=GET_UPDATE_DELETE_SINGLE, request=POST, body=character)
+        response = self._request(url=GET_ALL_CREATE_SINGLE, request=POST, data=json.dumps(character))
 
         if not response.ok:
             self.logger.error('Failed to create character %s in campaign %s', character.get('name', 'None'), self.campaign.get('name'))
@@ -148,7 +148,7 @@ class CharacterAPI(BaseManager):
         Returns:
             character: the updated character
         """
-        response = self._request(url=GET_UPDATE_DELETE_SINGLE, request=PUT, body=character)
+        response = self._request(url=GET_UPDATE_DELETE_SINGLE % character.get('id'), request=PUT, data=json.dumps(character))
 
         if not response.ok:
             self.logger.error('Failed to update character %s in campaign %s', character.get('name', 'None'), self.campaign.get('name'))
@@ -173,11 +173,11 @@ class CharacterAPI(BaseManager):
         Returns:
             bool: whether the character is successfully deleted
         """
-        response = self._request(url=GET_UPDATE_DELETE_SINGLE, request=DELETE)
+        response = self._request(url=GET_UPDATE_DELETE_SINGLE % id, request=DELETE)
 
         if not response.ok:
             self.logger.error('Failed to delete character %s in campaign %s', id, self.campaign.get('name'))
             raise self.KankaException(response.reason, response.status_code, message=response.json())
 
-        self.logger.debug(response.json())
+        self.logger.debug(response)
         return True

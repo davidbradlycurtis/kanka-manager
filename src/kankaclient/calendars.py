@@ -51,7 +51,7 @@ class CalendarAPI(BaseManager):
 
         if not response.ok:
             self.logger.error('Failed to retrieve calendars from campaign %s', self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         calendars = json.loads(response.text).get('data')
         self.logger.debug(response.json())
@@ -59,12 +59,12 @@ class CalendarAPI(BaseManager):
         return calendars
 
 
-    def get_calendar(self, name: str) -> dict:
+    def get_calendar(self, name_or_id: str or int) -> dict:
         """
         Retrives the desired calendar by name
 
         Args:
-            name (str): the name of the calendar
+            name_or_id (str or int): the name or id of the calendar
 
         Raises:
             KankaException: Kanka Api Interface Exception
@@ -73,14 +73,17 @@ class CalendarAPI(BaseManager):
             calendar: the requested calendar
         """
         calendar = None
-        calendars = self.get_calendars()
-        for _calendar in calendars:
-            if _calendar.get('name') == name:
-                calendar = _calendar
-                break
+        if type(name_or_id) is int:
+            calendar = self.get_calendar_by_id(name_or_id)
+        else:
+            calendars = self.get_calendars()
+            for _calendar in calendars:
+                if _calendar.get('name') == name_or_id:
+                    calendar = _calendar
+                    break
 
         if calendar is None:
-            raise self.KankaException(reason=None, code=404, message=f'calendar not found: {name}')
+            raise self.KankaException(reason=None, code=404, message=f'Calendar not found: {name_or_id}')
 
         return calendar
 
@@ -98,11 +101,11 @@ class CalendarAPI(BaseManager):
         Returns:
             calendar: the requested calendar
         """
-        response = self._request(url=GET_UPDATE_DELETE_SINGLE, request=GET)
+        response = self._request(url=GET_UPDATE_DELETE_SINGLE % id, request=GET)
 
         if not response.ok:
             self.logger.error('Failed to retrieve calendar %s from campaign %s', id, self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         calendar = json.loads(response.text).get('data')
         self.logger.debug(response.json())
@@ -123,11 +126,11 @@ class CalendarAPI(BaseManager):
         Returns:
             calendar: the created calendar
         """
-        response = self._request(url=GET_UPDATE_DELETE_SINGLE, request=POST, body=calendar)
+        response = self._request(url=GET_ALL_CREATE_SINGLE, request=POST, data=json.dumps(calendar))
 
         if not response.ok:
             self.logger.error('Failed to create calendar %s in campaign %s', calendar.get('name', 'None'), self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         calendar = json.loads(response.text).get('data')
         self.logger.debug(response.json())
@@ -148,11 +151,11 @@ class CalendarAPI(BaseManager):
         Returns:
             calendar: the updated calendar
         """
-        response = self._request(url=GET_UPDATE_DELETE_SINGLE, request=PUT, body=calendar)
+        response = self._request(url=GET_UPDATE_DELETE_SINGLE % calendar.get('id'), request=PUT, data=json.dumps(calendar))
 
         if not response.ok:
             self.logger.error('Failed to update calendar %s in campaign %s', calendar.get('name', 'None'), self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         calendar = json.loads(response.text).get('data')
         self.logger.debug(response.json())
@@ -173,11 +176,11 @@ class CalendarAPI(BaseManager):
         Returns:
             bool: whether the calendar is successfully deleted
         """
-        response = self._request(url=GET_UPDATE_DELETE_SINGLE, request=DELETE)
+        response = self._request(url=GET_UPDATE_DELETE_SINGLE % id, request=DELETE)
 
         if not response.ok:
             self.logger.error('Failed to delete calendar %s in campaign %s', id, self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
-        self.logger.debug(response.json())
+        self.logger.debug(response)
         return True

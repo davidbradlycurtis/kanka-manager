@@ -51,7 +51,7 @@ class OrganizationAPI(BaseManager):
 
         if not response.ok:
             self.logger.error('Failed to retrieve organizations from campaign %s', self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         organizations = json.loads(response.text).get('data')
         self.logger.debug(response.json())
@@ -59,12 +59,12 @@ class OrganizationAPI(BaseManager):
         return organizations
 
 
-    def get_organization(self, name: str) -> dict:
+    def get_organization(self, name_or_id: str or int) -> dict:
         """
         Retrives the desired organization by name
 
         Args:
-            name (str): the name of the organization
+            name_or_id (str or int): the name or id of the organization
 
         Raises:
             KankaException: Kanka Api Interface Exception
@@ -73,14 +73,18 @@ class OrganizationAPI(BaseManager):
             organization: the requested organization
         """
         organization = None
-        organizations = self.get_organizations()
-        for _organization in organizations:
-            if _organization.get('name') == name:
-                organization = _organization
-                break
+        if type(name_or_id) is int:
+            organization = self.get_organization_by_id(name_or_id)
+        else:
+            organizations = self.get_organizations()
+            for _organization in organizations:
+                if _organization.get('name') == name_or_id:
+                    organization = _organization
+                    break
 
         if organization is None:
-            raise self.KankaException(reason=None, code=404, message=f'organization not found: {name}')
+            # TODO: Fix this exception message in each api
+            raise self.KankaException(reason=None, code=404, message=f'Organization not found: {name_or_id}')
 
         return organization
 
@@ -98,11 +102,11 @@ class OrganizationAPI(BaseManager):
         Returns:
             organization: the requested organization
         """
-        response = self._request(url=GET_UPDATE_DELETE_SINGLE, request=GET)
+        response = self._request(url=GET_UPDATE_DELETE_SINGLE % id, request=GET)
 
         if not response.ok:
             self.logger.error('Failed to retrieve organization %s from campaign %s', id, self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         organization = json.loads(response.text).get('data')
         self.logger.debug(response.json())
@@ -123,11 +127,11 @@ class OrganizationAPI(BaseManager):
         Returns:
             organization: the created organization
         """
-        response = self._request(url=GET_UPDATE_DELETE_SINGLE, request=POST, body=organization)
+        response = self._request(url=GET_ALL_CREATE_SINGLE, request=POST, data=json.dumps(organization))
 
         if not response.ok:
             self.logger.error('Failed to create organization %s in campaign %s', organization.get('name', 'None'), self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         organization = json.loads(response.text).get('data')
         self.logger.debug(response.json())
@@ -148,11 +152,11 @@ class OrganizationAPI(BaseManager):
         Returns:
             organization: the updated organization
         """
-        response = self._request(url=GET_UPDATE_DELETE_SINGLE, request=PUT, body=organization)
+        response = self._request(url=GET_UPDATE_DELETE_SINGLE % organization.get('id'), request=PUT, data=json.dumps(organization))
 
         if not response.ok:
             self.logger.error('Failed to update organization %s in campaign %s', organization.get('name', 'None'), self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         organization = json.loads(response.text).get('data')
         self.logger.debug(response.json())
@@ -173,11 +177,11 @@ class OrganizationAPI(BaseManager):
         Returns:
             bool: whether the organization is successfully deleted
         """
-        response = self._request(url=GET_UPDATE_DELETE_SINGLE, request=DELETE)
+        response = self._request(url=GET_UPDATE_DELETE_SINGLE % id, request=DELETE)
 
         if not response.ok:
             self.logger.error('Failed to delete organization %s in campaign %s', id, self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
-        self.logger.debug(response.json())
+        self.logger.debug(response)
         return True

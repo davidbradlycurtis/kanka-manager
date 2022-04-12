@@ -51,7 +51,7 @@ class ItemAPI(BaseManager):
 
         if not response.ok:
             self.logger.error('Failed to retrieve items from campaign %s', self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         items = json.loads(response.text).get('data')
         self.logger.debug(response.json())
@@ -59,12 +59,12 @@ class ItemAPI(BaseManager):
         return items
 
 
-    def get_item(self, name: str) -> dict:
+    def get_item(self, name_or_id: str or int) -> dict:
         """
         Retrives the desired item by name
 
         Args:
-            name (str): the name of the item
+            name_or_id (str or int): the name or id of the item
 
         Raises:
             KankaException: Kanka Api Interface Exception
@@ -73,14 +73,17 @@ class ItemAPI(BaseManager):
             item: the requested item
         """
         item = None
-        items = self.get_items()
-        for _item in items:
-            if _item.get('name') == name:
-                item = _item
-                break
+        if type(name_or_id) is int:
+            item = self.get_item_by_id(name_or_id)
+        else:
+            items = self.get_items()
+            for _item in items:
+                if _item.get('name') == name_or_id:
+                    item = _item
+                    break
 
         if item is None:
-            raise self.KankaException(reason=None, code=404, message=f'item not found: {name}')
+            raise self.KankaException(reason=None, code=404, message=f'Item not found: {name_or_id}')
 
         return item
 
@@ -98,11 +101,11 @@ class ItemAPI(BaseManager):
         Returns:
             item: the requested item
         """
-        response = self._request(url=GET_UPDATE_DELETE_SINGLE, request=GET)
+        response = self._request(url=GET_UPDATE_DELETE_SINGLE % id, request=GET)
 
         if not response.ok:
             self.logger.error('Failed to retrieve item %s from campaign %s', id, self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         item = json.loads(response.text).get('data')
         self.logger.debug(response.json())
@@ -123,11 +126,11 @@ class ItemAPI(BaseManager):
         Returns:
             item: the created item
         """
-        response = self._request(url=GET_UPDATE_DELETE_SINGLE, request=POST, body=item)
+        response = self._request(url=GET_ALL_CREATE_SINGLE, request=POST, data=json.dumps(item))
 
         if not response.ok:
             self.logger.error('Failed to create item %s in campaign %s', item.get('name', 'None'), self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         item = json.loads(response.text).get('data')
         self.logger.debug(response.json())
@@ -148,11 +151,11 @@ class ItemAPI(BaseManager):
         Returns:
             item: the updated item
         """
-        response = self._request(url=GET_UPDATE_DELETE_SINGLE, request=PUT, body=item)
+        response = self._request(url=GET_UPDATE_DELETE_SINGLE % item.get('id'), request=PUT, data=json.dumps(item))
 
         if not response.ok:
             self.logger.error('Failed to update item %s in campaign %s', item.get('name', 'None'), self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         item = json.loads(response.text).get('data')
         self.logger.debug(response.json())
@@ -173,11 +176,11 @@ class ItemAPI(BaseManager):
         Returns:
             bool: whether the item is successfully deleted
         """
-        response = self._request(url=GET_UPDATE_DELETE_SINGLE, request=DELETE)
+        response = self._request(url=GET_UPDATE_DELETE_SINGLE % id, request=DELETE)
 
         if not response.ok:
             self.logger.error('Failed to delete item %s in campaign %s', id, self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
-        self.logger.debug(response.json())
+        self.logger.debug(response)
         return True

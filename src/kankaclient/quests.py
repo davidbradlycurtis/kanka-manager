@@ -51,7 +51,7 @@ class QuestAPI(BaseManager):
 
         if not response.ok:
             self.logger.error('Failed to retrieve quests from campaign %s', self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         quests = json.loads(response.text).get('data')
         self.logger.debug(response.json())
@@ -59,12 +59,12 @@ class QuestAPI(BaseManager):
         return quests
 
 
-    def get_quest(self, name: str) -> dict:
+    def get_quest(self, name_or_id: str or int) -> dict:
         """
         Retrives the desired quest by name
 
         Args:
-            name (str): the name of the quest
+            name_or_id (str or int): the name or id of the quest
 
         Raises:
             KankaException: Kanka Api Interface Exception
@@ -73,14 +73,18 @@ class QuestAPI(BaseManager):
             quest: the requested quest
         """
         quest = None
-        quests = self.get_quests()
-        for _quest in quests:
-            if _quest.get('name') == name:
-                quest = _quest
-                break
+        if type(name_or_id) is int:
+            quest = self.get_quest_by_id(name_or_id)
+        else:
+            quests = self.get_quests()
+            for _quest in quests:
+                if _quest.get('name') == name_or_id:
+                    quest = _quest
+                    break
 
         if quest is None:
-            raise self.KankaException(reason=None, code=404, message=f'quest not found: {name}')
+            # TODO: Fix this exception message in each api
+            raise self.KankaException(reason=None, code=404, message=f'Quest not found: {name_or_id}')
 
         return quest
 
@@ -98,11 +102,11 @@ class QuestAPI(BaseManager):
         Returns:
             quest: the requested quest
         """
-        response = self._request(url=GET_UPDATE_DELETE_SINGLE, request=GET)
+        response = self._request(url=GET_UPDATE_DELETE_SINGLE % id, request=GET)
 
         if not response.ok:
             self.logger.error('Failed to retrieve quest %s from campaign %s', id, self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         quest = json.loads(response.text).get('data')
         self.logger.debug(response.json())
@@ -123,11 +127,11 @@ class QuestAPI(BaseManager):
         Returns:
             quest: the created quest
         """
-        response = self._request(url=GET_UPDATE_DELETE_SINGLE, request=POST, body=quest)
+        response = self._request(url=GET_ALL_CREATE_SINGLE, request=POST, data=json.dumps(quest))
 
         if not response.ok:
             self.logger.error('Failed to create quest %s in campaign %s', quest.get('name', 'None'), self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         quest = json.loads(response.text).get('data')
         self.logger.debug(response.json())
@@ -148,11 +152,11 @@ class QuestAPI(BaseManager):
         Returns:
             quest: the updated quest
         """
-        response = self._request(url=GET_UPDATE_DELETE_SINGLE, request=PUT, body=quest)
+        response = self._request(url=GET_UPDATE_DELETE_SINGLE % quest.get('id'), request=PUT, data=json.dumps(quest))
 
         if not response.ok:
             self.logger.error('Failed to update quest %s in campaign %s', quest.get('name', 'None'), self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         quest = json.loads(response.text).get('data')
         self.logger.debug(response.json())
@@ -173,11 +177,11 @@ class QuestAPI(BaseManager):
         Returns:
             bool: whether the quest is successfully deleted
         """
-        response = self._request(url=GET_UPDATE_DELETE_SINGLE, request=DELETE)
+        response = self._request(url=GET_UPDATE_DELETE_SINGLE % id, request=DELETE)
 
         if not response.ok:
             self.logger.error('Failed to delete quest %s in campaign %s', id, self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
-        self.logger.debug(response.json())
+        self.logger.debug(response)
         return True

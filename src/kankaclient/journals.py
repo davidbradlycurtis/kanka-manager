@@ -51,7 +51,7 @@ class JournalAPI(BaseManager):
 
         if not response.ok:
             self.logger.error('Failed to retrieve journals from campaign %s', self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         journals = json.loads(response.text).get('data')
         self.logger.debug(response.json())
@@ -59,12 +59,12 @@ class JournalAPI(BaseManager):
         return journals
 
 
-    def get_journal(self, name: str) -> dict:
+    def get_journal(self, name_or_id: str or int) -> dict:
         """
         Retrives the desired journal by name
 
         Args:
-            name (str): the name of the journal
+            name_or_id (str or int): the name or id of the journal
 
         Raises:
             KankaException: Kanka Api Interface Exception
@@ -73,14 +73,17 @@ class JournalAPI(BaseManager):
             journal: the requested journal
         """
         journal = None
-        journals = self.get_journals()
-        for _journal in journals:
-            if _journal.get('name') == name:
-                journal = _journal
-                break
+        if type(name_or_id) is int:
+            journal = self.get_journal_by_id(name_or_id)
+        else:
+            journals = self.get_journals()
+            for _journal in journals:
+                if _journal.get('name') == name_or_id:
+                    journal = _journal
+                    break
 
         if journal is None:
-            raise self.KankaException(reason=None, code=404, message=f'journal not found: {name}')
+            raise self.KankaException(reason=None, code=404, message=f'Journal not found: {name_or_id}')
 
         return journal
 
@@ -98,11 +101,11 @@ class JournalAPI(BaseManager):
         Returns:
             journal: the requested journal
         """
-        response = self._request(url=GET_UPDATE_DELETE_SINGLE, request=GET)
+        response = self._request(url=GET_UPDATE_DELETE_SINGLE % id, request=GET)
 
         if not response.ok:
             self.logger.error('Failed to retrieve journal %s from campaign %s', id, self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         journal = json.loads(response.text).get('data')
         self.logger.debug(response.json())
@@ -123,11 +126,11 @@ class JournalAPI(BaseManager):
         Returns:
             journal: the created journal
         """
-        response = self._request(url=GET_UPDATE_DELETE_SINGLE, request=POST, body=journal)
+        response = self._request(url=GET_ALL_CREATE_SINGLE, request=POST, data=json.dumps(journal))
 
         if not response.ok:
             self.logger.error('Failed to create journal %s in campaign %s', journal.get('name', 'None'), self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         journal = json.loads(response.text).get('data')
         self.logger.debug(response.json())
@@ -148,11 +151,11 @@ class JournalAPI(BaseManager):
         Returns:
             journal: the updated journal
         """
-        response = self._request(url=GET_UPDATE_DELETE_SINGLE, request=PUT, body=journal)
+        response = self._request(url=GET_UPDATE_DELETE_SINGLE % journal.get('id'), request=PUT, data=json.dumps(journal))
 
         if not response.ok:
             self.logger.error('Failed to update journal %s in campaign %s', journal.get('name', 'None'), self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         journal = json.loads(response.text).get('data')
         self.logger.debug(response.json())
@@ -173,11 +176,11 @@ class JournalAPI(BaseManager):
         Returns:
             bool: whether the journal is successfully deleted
         """
-        response = self._request(url=GET_UPDATE_DELETE_SINGLE, request=DELETE)
+        response = self._request(url=GET_UPDATE_DELETE_SINGLE % id, request=DELETE)
 
         if not response.ok:
             self.logger.error('Failed to delete journal %s in campaign %s', id, self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
-        self.logger.debug(response.json())
+        self.logger.debug(response)
         return True

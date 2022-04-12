@@ -44,7 +44,7 @@ def read_data(file):
 def test_characters(client):
     characters = client.characters.get_characters()
     vincent = client.characters.get_character('Vincent Von Hess')
-    vincent_by_id = client.characters.get_character_by_id(677748)
+    vincent_by_id = client.characters.get_character(677748)
     test_character = client.characters.create_character({"name": "test_character"})
     test_character['name'] = 'test_character_updated'
     test_character = client.characters.update_character({"name": "test_character_updated", "id": test_character.get("id")})

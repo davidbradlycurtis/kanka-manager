@@ -51,20 +51,20 @@ class LocationAPI(BaseManager):
 
         if not response.ok:
             self.logger.error('Failed to retrieve locations from campaign %s', self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         locations = json.loads(response.text).get('data')
         self.logger.debug(response.json())
 
         return locations
-    
-    
-    def get_location(self, name: str) -> dict:
+
+
+    def get_location(self, name_or_id: str or int) -> dict:
         """
         Retrives the desired location by name
 
         Args:
-            name (str): the name of the location
+            name_or_id (str or int): the name or id of the location
 
         Raises:
             KankaException: Kanka Api Interface Exception
@@ -73,14 +73,17 @@ class LocationAPI(BaseManager):
             location: the requested location
         """
         location = None
-        locations = self.get_locations()
-        for _location in locations:
-            if _location.get('name') == name:
-                location = _location
-                break
+        if type(name_or_id) is int:
+            location = self.get_location_by_id(name_or_id)
+        else:
+            locations = self.get_locations()
+            for _location in locations:
+                if _location.get('name') == name_or_id:
+                    location = _location
+                    break
 
         if location is None:
-            raise self.KankaException(reason=None, code=404, message=f'location not found: {name}')
+            raise self.KankaException(reason=None, code=404, message=f'Location not found: {name_or_id}')
 
         return location
 
@@ -98,11 +101,11 @@ class LocationAPI(BaseManager):
         Returns:
             location: the requested location
         """
-        response = self._request(url=GET_UPDATE_DELETE_SINGLE, request=GET)
+        response = self._request(url=GET_UPDATE_DELETE_SINGLE % id, request=GET)
 
         if not response.ok:
             self.logger.error('Failed to retrieve location %s from campaign %s', id, self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         location = json.loads(response.text).get('data')
         self.logger.debug(response.json())
@@ -123,11 +126,11 @@ class LocationAPI(BaseManager):
         Returns:
             location: the created location
         """
-        response = self._request(url=GET_UPDATE_DELETE_SINGLE, request=POST, body=location)
+        response = self._request(url=GET_ALL_CREATE_SINGLE, request=POST, data=json.dumps(location))
 
         if not response.ok:
             self.logger.error('Failed to create location %s in campaign %s', location.get('name', 'None'), self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         location = json.loads(response.text).get('data')
         self.logger.debug(response.json())
@@ -148,11 +151,11 @@ class LocationAPI(BaseManager):
         Returns:
             location: the updated location
         """
-        response = self._request(url=GET_UPDATE_DELETE_SINGLE, request=PUT, body=location)
+        response = self._request(url=GET_UPDATE_DELETE_SINGLE % location.get('id'), request=PUT, data=json.dumps(location))
 
         if not response.ok:
             self.logger.error('Failed to update location %s in campaign %s', location.get('name', 'None'), self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         location = json.loads(response.text).get('data')
         self.logger.debug(response.json())
@@ -173,11 +176,11 @@ class LocationAPI(BaseManager):
         Returns:
             bool: whether the location is successfully deleted
         """
-        response = self._request(url=GET_UPDATE_DELETE_SINGLE, request=DELETE)
+        response = self._request(url=GET_UPDATE_DELETE_SINGLE % id, request=DELETE)
 
         if not response.ok:
             self.logger.error('Failed to delete location %s in campaign %s', id, self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
-        self.logger.debug(response.json())
+        self.logger.debug(response)
         return True

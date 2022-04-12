@@ -51,7 +51,7 @@ class NoteAPI(BaseManager):
 
         if not response.ok:
             self.logger.error('Failed to retrieve notes from campaign %s', self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         notes = json.loads(response.text).get('data')
         self.logger.debug(response.json())
@@ -59,12 +59,12 @@ class NoteAPI(BaseManager):
         return notes
 
 
-    def get_note(self, name: str) -> dict:
+    def get_note(self, name_or_id: str or int) -> dict:
         """
         Retrives the desired note by name
 
         Args:
-            name (str): the name of the note
+            name_or_id (str or int): the name or id of the note
 
         Raises:
             KankaException: Kanka Api Interface Exception
@@ -73,14 +73,18 @@ class NoteAPI(BaseManager):
             note: the requested note
         """
         note = None
-        notes = self.get_notes()
-        for _note in notes:
-            if _note.get('name') == name:
-                note = _note
-                break
+        if type(name_or_id) is int:
+            note = self.get_note_by_id(name_or_id)
+        else:
+            notes = self.get_notes()
+            for _note in notes:
+                if _note.get('name') == name_or_id:
+                    note = _note
+                    break
 
         if note is None:
-            raise self.KankaException(reason=None, code=404, message=f'note not found: {name}')
+            # TODO: Fix this exception message in each api
+            raise self.KankaException(reason=None, code=404, message=f'Note not found: {name_or_id}')
 
         return note
 
@@ -98,11 +102,11 @@ class NoteAPI(BaseManager):
         Returns:
             note: the requested note
         """
-        response = self._request(url=GET_UPDATE_DELETE_SINGLE, request=GET)
+        response = self._request(url=GET_UPDATE_DELETE_SINGLE % id, request=GET)
 
         if not response.ok:
             self.logger.error('Failed to retrieve note %s from campaign %s', id, self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         note = json.loads(response.text).get('data')
         self.logger.debug(response.json())
@@ -123,11 +127,11 @@ class NoteAPI(BaseManager):
         Returns:
             note: the created note
         """
-        response = self._request(url=GET_UPDATE_DELETE_SINGLE, request=POST, body=note)
+        response = self._request(url=GET_ALL_CREATE_SINGLE, request=POST, data=json.dumps(note))
 
         if not response.ok:
             self.logger.error('Failed to create note %s in campaign %s', note.get('name', 'None'), self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         note = json.loads(response.text).get('data')
         self.logger.debug(response.json())
@@ -148,11 +152,11 @@ class NoteAPI(BaseManager):
         Returns:
             note: the updated note
         """
-        response = self._request(url=GET_UPDATE_DELETE_SINGLE, request=PUT, body=note)
+        response = self._request(url=GET_UPDATE_DELETE_SINGLE % note.get('id'), request=PUT, data=json.dumps(note))
 
         if not response.ok:
             self.logger.error('Failed to update note %s in campaign %s', note.get('name', 'None'), self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         note = json.loads(response.text).get('data')
         self.logger.debug(response.json())
@@ -173,11 +177,11 @@ class NoteAPI(BaseManager):
         Returns:
             bool: whether the note is successfully deleted
         """
-        response = self._request(url=GET_UPDATE_DELETE_SINGLE, request=DELETE)
+        response = self._request(url=GET_UPDATE_DELETE_SINGLE % id, request=DELETE)
 
         if not response.ok:
             self.logger.error('Failed to delete note %s in campaign %s', id, self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
-        self.logger.debug(response.json())
+        self.logger.debug(response)
         return True

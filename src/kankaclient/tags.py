@@ -51,7 +51,7 @@ class TagAPI(BaseManager):
 
         if not response.ok:
             self.logger.error('Failed to retrieve tags from campaign %s', self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         tags = json.loads(response.text).get('data')
         self.logger.debug(response.json())
@@ -59,12 +59,12 @@ class TagAPI(BaseManager):
         return tags
 
 
-    def get_tag(self, name: str) -> dict:
+    def get_tag(self, name_or_id: str or int) -> dict:
         """
         Retrives the desired tag by name
 
         Args:
-            name (str): the name of the tag
+            name_or_id (str or int): the name or id of the tag
 
         Raises:
             KankaException: Kanka Api Interface Exception
@@ -73,14 +73,18 @@ class TagAPI(BaseManager):
             tag: the requested tag
         """
         tag = None
-        tags = self.get_tags()
-        for _tag in tags:
-            if _tag.get('name') == name:
-                tag = _tag
-                break
+        if type(name_or_id) is int:
+            tag = self.get_tag_by_id(name_or_id)
+        else:
+            tags = self.get_tags()
+            for _tag in tags:
+                if _tag.get('name') == name_or_id:
+                    tag = _tag
+                    break
 
         if tag is None:
-            raise self.KankaException(reason=None, code=404, message=f'tag not found: {name}')
+            # TODO: Fix this exception message in each api
+            raise self.KankaException(reason=None, code=404, message=f'Tag not found: {name_or_id}')
 
         return tag
 
@@ -98,11 +102,11 @@ class TagAPI(BaseManager):
         Returns:
             tag: the requested tag
         """
-        response = self._request(url=GET_UPDATE_DELETE_SINGLE, request=GET)
+        response = self._request(url=GET_UPDATE_DELETE_SINGLE % id, request=GET)
 
         if not response.ok:
             self.logger.error('Failed to retrieve tag %s from campaign %s', id, self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         tag = json.loads(response.text).get('data')
         self.logger.debug(response.json())
@@ -123,11 +127,11 @@ class TagAPI(BaseManager):
         Returns:
             tag: the created tag
         """
-        response = self._request(url=GET_UPDATE_DELETE_SINGLE, request=POST, body=tag)
+        response = self._request(url=GET_ALL_CREATE_SINGLE, request=POST, data=json.dumps(tag))
 
         if not response.ok:
             self.logger.error('Failed to create tag %s in campaign %s', tag.get('name', 'None'), self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         tag = json.loads(response.text).get('data')
         self.logger.debug(response.json())
@@ -148,11 +152,11 @@ class TagAPI(BaseManager):
         Returns:
             tag: the updated tag
         """
-        response = self._request(url=GET_UPDATE_DELETE_SINGLE, request=PUT, body=tag)
+        response = self._request(url=GET_UPDATE_DELETE_SINGLE % tag.get('id'), request=PUT, data=json.dumps(tag))
 
         if not response.ok:
             self.logger.error('Failed to update tag %s in campaign %s', tag.get('name', 'None'), self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         tag = json.loads(response.text).get('data')
         self.logger.debug(response.json())
@@ -173,11 +177,11 @@ class TagAPI(BaseManager):
         Returns:
             bool: whether the tag is successfully deleted
         """
-        response = self._request(url=GET_UPDATE_DELETE_SINGLE, request=DELETE)
+        response = self._request(url=GET_UPDATE_DELETE_SINGLE % id, request=DELETE)
 
         if not response.ok:
             self.logger.error('Failed to delete tag %s in campaign %s', id, self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
-        self.logger.debug(response.json())
+        self.logger.debug(response)
         return True

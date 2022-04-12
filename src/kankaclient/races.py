@@ -51,7 +51,7 @@ class RaceAPI(BaseManager):
 
         if not response.ok:
             self.logger.error('Failed to retrieve races from campaign %s', self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         races = json.loads(response.text).get('data')
         self.logger.debug(response.json())
@@ -59,12 +59,12 @@ class RaceAPI(BaseManager):
         return races
 
 
-    def get_race(self, name: str) -> dict:
+    def get_race(self, name_or_id: str or int) -> dict:
         """
         Retrives the desired race by name
 
         Args:
-            name (str): the name of the race
+            name_or_id (str or int): the name or id of the race
 
         Raises:
             KankaException: Kanka Api Interface Exception
@@ -73,14 +73,18 @@ class RaceAPI(BaseManager):
             race: the requested race
         """
         race = None
-        races = self.get_races()
-        for _race in races:
-            if _race.get('name') == name:
-                race = _race
-                break
+        if type(name_or_id) is int:
+            race = self.get_race_by_id(name_or_id)
+        else:
+            races = self.get_races()
+            for _race in races:
+                if _race.get('name') == name_or_id:
+                    race = _race
+                    break
 
         if race is None:
-            raise self.KankaException(reason=None, code=404, message=f'race not found: {name}')
+            # TODO: Fix this exception message in each api
+            raise self.KankaException(reason=None, code=404, message=f'Race not found: {name_or_id}')
 
         return race
 
@@ -98,11 +102,11 @@ class RaceAPI(BaseManager):
         Returns:
             race: the requested race
         """
-        response = self._request(url=GET_UPDATE_DELETE_SINGLE, request=GET)
+        response = self._request(url=GET_UPDATE_DELETE_SINGLE % id, request=GET)
 
         if not response.ok:
             self.logger.error('Failed to retrieve race %s from campaign %s', id, self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         race = json.loads(response.text).get('data')
         self.logger.debug(response.json())
@@ -123,11 +127,11 @@ class RaceAPI(BaseManager):
         Returns:
             race: the created race
         """
-        response = self._request(url=GET_UPDATE_DELETE_SINGLE, request=POST, body=race)
+        response = self._request(url=GET_ALL_CREATE_SINGLE, request=POST, data=json.dumps(race))
 
         if not response.ok:
             self.logger.error('Failed to create race %s in campaign %s', race.get('name', 'None'), self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         race = json.loads(response.text).get('data')
         self.logger.debug(response.json())
@@ -148,11 +152,11 @@ class RaceAPI(BaseManager):
         Returns:
             race: the updated race
         """
-        response = self._request(url=GET_UPDATE_DELETE_SINGLE, request=PUT, body=race)
+        response = self._request(url=GET_UPDATE_DELETE_SINGLE % race.get('id'), request=PUT, data=json.dumps(race))
 
         if not response.ok:
             self.logger.error('Failed to update race %s in campaign %s', race.get('name', 'None'), self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         race = json.loads(response.text).get('data')
         self.logger.debug(response.json())
@@ -173,11 +177,11 @@ class RaceAPI(BaseManager):
         Returns:
             bool: whether the race is successfully deleted
         """
-        response = self._request(url=GET_UPDATE_DELETE_SINGLE, request=DELETE)
+        response = self._request(url=GET_UPDATE_DELETE_SINGLE % id, request=DELETE)
 
         if not response.ok:
             self.logger.error('Failed to delete race %s in campaign %s', id, self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
-        self.logger.debug(response.json())
+        self.logger.debug(response)
         return True

@@ -1,5 +1,5 @@
 """
-Kanka DiceRole API
+Kanka DiceRoll API
 
 """
 # pylint: disable=bare-except,super-init-not-called,no-else-break
@@ -11,8 +11,8 @@ import json
 from kankaclient.constants import BASE_URL, GET, POST, DELETE, PUT
 from kankaclient.base import BaseManager
 
-class DiceRoleAPI(BaseManager):
-    """Kanka DiceRole API"""
+class DiceRollAPI(BaseManager):
+    """Kanka DiceRoll API"""
 
     GET_ALL_CREATE_SINGLE: str
     GET_UPDATE_DELETE_SINGLE: str
@@ -51,7 +51,7 @@ class DiceRoleAPI(BaseManager):
 
         if not response.ok:
             self.logger.error('Failed to retrieve dice_rolls from campaign %s', self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         dice_rolls = json.loads(response.text).get('data')
         self.logger.debug(response.json())
@@ -59,12 +59,12 @@ class DiceRoleAPI(BaseManager):
         return dice_rolls
 
 
-    def get_dice_roll(self, name: str) -> dict:
+    def get_dice_roll(self, name_or_id: str or int) -> dict:
         """
         Retrives the desired dice_roll by name
 
         Args:
-            name (str): the name of the dice_roll
+            name_or_id (str or int): the name or id of the dice_roll
 
         Raises:
             KankaException: Kanka Api Interface Exception
@@ -73,14 +73,17 @@ class DiceRoleAPI(BaseManager):
             dice_roll: the requested dice_roll
         """
         dice_roll = None
-        dice_rolls = self.get_dice_rolls()
-        for _dice_roll in dice_rolls:
-            if _dice_roll.get('name') == name:
-                dice_roll = _dice_roll
-                break
+        if type(name_or_id) is int:
+            dice_roll = self.get_dice_roll_by_id(name_or_id)
+        else:
+            dice_rolls = self.get_dice_rolls()
+            for _dice_roll in dice_rolls:
+                if _dice_roll.get('name') == name_or_id:
+                    dice_roll = _dice_roll
+                    break
 
         if dice_roll is None:
-            raise self.KankaException(reason=None, code=404, message=f'dice_roll not found: {name}')
+            raise self.KankaException(reason=None, code=404, message=f'Dice roll not found: {name_or_id}')
 
         return dice_roll
 
@@ -98,11 +101,11 @@ class DiceRoleAPI(BaseManager):
         Returns:
             dice_roll: the requested dice_roll
         """
-        response = self._request(url=GET_UPDATE_DELETE_SINGLE, request=GET)
+        response = self._request(url=GET_UPDATE_DELETE_SINGLE % id, request=GET)
 
         if not response.ok:
             self.logger.error('Failed to retrieve dice_roll %s from campaign %s', id, self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         dice_roll = json.loads(response.text).get('data')
         self.logger.debug(response.json())
@@ -123,11 +126,11 @@ class DiceRoleAPI(BaseManager):
         Returns:
             dice_roll: the created dice_roll
         """
-        response = self._request(url=GET_UPDATE_DELETE_SINGLE, request=POST, body=dice_roll)
+        response = self._request(url=GET_ALL_CREATE_SINGLE, request=POST, data=json.dumps(dice_roll))
 
         if not response.ok:
             self.logger.error('Failed to create dice_roll %s in campaign %s', dice_roll.get('name', 'None'), self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         dice_roll = json.loads(response.text).get('data')
         self.logger.debug(response.json())
@@ -148,11 +151,11 @@ class DiceRoleAPI(BaseManager):
         Returns:
             dice_roll: the updated dice_roll
         """
-        response = self._request(url=GET_UPDATE_DELETE_SINGLE, request=PUT, body=dice_roll)
+        response = self._request(url=GET_UPDATE_DELETE_SINGLE % dice_roll.get('id'), request=PUT, data=json.dumps(dice_roll))
 
         if not response.ok:
             self.logger.error('Failed to update dice_roll %s in campaign %s', dice_roll.get('name', 'None'), self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         dice_roll = json.loads(response.text).get('data')
         self.logger.debug(response.json())
@@ -173,11 +176,11 @@ class DiceRoleAPI(BaseManager):
         Returns:
             bool: whether the dice_roll is successfully deleted
         """
-        response = self._request(url=GET_UPDATE_DELETE_SINGLE, request=DELETE)
+        response = self._request(url=GET_UPDATE_DELETE_SINGLE % id, request=DELETE)
 
         if not response.ok:
             self.logger.error('Failed to delete dice_roll %s in campaign %s', id, self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
-        self.logger.debug(response.json())
+        self.logger.debug(response)
         return True

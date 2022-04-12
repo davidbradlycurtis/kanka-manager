@@ -51,7 +51,7 @@ class CharacterAPI(BaseManager):
 
         if not response.ok:
             self.logger.error('Failed to retrieve characters from campaign %s', self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         characters = json.loads(response.text).get('data')
         self.logger.debug(response.json())
@@ -59,12 +59,12 @@ class CharacterAPI(BaseManager):
         return characters
 
 
-    def get_character(self, name: str) -> dict:
+    def get_character(self, name_or_id: str or int) -> dict:
         """
         Retrives the desired character by name
 
         Args:
-            name (str): the name of the character
+            name_or_id (str or int): the name or id of the character
 
         Raises:
             KankaException: Kanka Api Interface Exception
@@ -73,14 +73,18 @@ class CharacterAPI(BaseManager):
             character: the requested character
         """
         character = None
-        characters = self.get_characters()
-        for _character in characters:
-            if _character.get('name') == name:
-                character = _character
-                break
+        if type(name_or_id) is int:
+            character = self.get_character_by_id(name_or_id)
+        else:
+            characters = self.get_characters()
+            for _character in characters:
+                if _character.get('name') == name_or_id:
+                    character = _character
+                    break
 
         if character is None:
-            raise self.KankaException(reason=None, code=404, message=f'Character not found: {name}')
+            # TODO: Fix this exception message in each api
+            raise self.KankaException(reason=None, code=404, message=f'Character not found: {name_or_id}')
 
         return character
 
@@ -102,7 +106,7 @@ class CharacterAPI(BaseManager):
 
         if not response.ok:
             self.logger.error('Failed to retrieve character %s from campaign %s', id, self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         character = json.loads(response.text).get('data')
         self.logger.debug(response.json())
@@ -127,7 +131,7 @@ class CharacterAPI(BaseManager):
 
         if not response.ok:
             self.logger.error('Failed to create character %s in campaign %s', character.get('name', 'None'), self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         character = json.loads(response.text).get('data')
         self.logger.debug(response.json())
@@ -152,7 +156,7 @@ class CharacterAPI(BaseManager):
 
         if not response.ok:
             self.logger.error('Failed to update character %s in campaign %s', character.get('name', 'None'), self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         character = json.loads(response.text).get('data')
         self.logger.debug(response.json())
@@ -177,7 +181,7 @@ class CharacterAPI(BaseManager):
 
         if not response.ok:
             self.logger.error('Failed to delete character %s in campaign %s', id, self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         self.logger.debug(response)
         return True

@@ -51,7 +51,7 @@ class EventAPI(BaseManager):
 
         if not response.ok:
             self.logger.error('Failed to retrieve events from campaign %s', self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         events = json.loads(response.text).get('data')
         self.logger.debug(response.json())
@@ -59,12 +59,12 @@ class EventAPI(BaseManager):
         return events
 
 
-    def get_event(self, name: str) -> dict:
+    def get_event(self, name_or_id: str or int) -> dict:
         """
         Retrives the desired event by name
 
         Args:
-            name (str): the name of the event
+            name_or_id (str or int): the name or id of the event
 
         Raises:
             KankaException: Kanka Api Interface Exception
@@ -73,14 +73,17 @@ class EventAPI(BaseManager):
             event: the requested event
         """
         event = None
-        events = self.get_events()
-        for _event in events:
-            if _event.get('name') == name:
-                event = _event
-                break
+        if type(name_or_id) is int:
+            event = self.get_event_by_id(name_or_id)
+        else:
+            events = self.get_events()
+            for _event in events:
+                if _event.get('name') == name_or_id:
+                    event = _event
+                    break
 
         if event is None:
-            raise self.KankaException(reason=None, code=404, message=f'event not found: {name}')
+            raise self.KankaException(reason=None, code=404, message=f'Event not found: {name_or_id}')
 
         return event
 
@@ -98,11 +101,11 @@ class EventAPI(BaseManager):
         Returns:
             event: the requested event
         """
-        response = self._request(url=GET_UPDATE_DELETE_SINGLE, request=GET)
+        response = self._request(url=GET_UPDATE_DELETE_SINGLE % id, request=GET)
 
         if not response.ok:
             self.logger.error('Failed to retrieve event %s from campaign %s', id, self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         event = json.loads(response.text).get('data')
         self.logger.debug(response.json())
@@ -123,11 +126,11 @@ class EventAPI(BaseManager):
         Returns:
             event: the created event
         """
-        response = self._request(url=GET_UPDATE_DELETE_SINGLE, request=POST, body=event)
+        response = self._request(url=GET_ALL_CREATE_SINGLE, request=POST, data=json.dumps(event))
 
         if not response.ok:
             self.logger.error('Failed to create event %s in campaign %s', event.get('name', 'None'), self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         event = json.loads(response.text).get('data')
         self.logger.debug(response.json())
@@ -148,11 +151,11 @@ class EventAPI(BaseManager):
         Returns:
             event: the updated event
         """
-        response = self._request(url=GET_UPDATE_DELETE_SINGLE, request=PUT, body=event)
+        response = self._request(url=GET_UPDATE_DELETE_SINGLE % event.get('id'), request=PUT, data=json.dumps(event))
 
         if not response.ok:
             self.logger.error('Failed to update event %s in campaign %s', event.get('name', 'None'), self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         event = json.loads(response.text).get('data')
         self.logger.debug(response.json())
@@ -173,11 +176,11 @@ class EventAPI(BaseManager):
         Returns:
             bool: whether the event is successfully deleted
         """
-        response = self._request(url=GET_UPDATE_DELETE_SINGLE, request=DELETE)
+        response = self._request(url=GET_UPDATE_DELETE_SINGLE % id, request=DELETE)
 
         if not response.ok:
             self.logger.error('Failed to delete event %s in campaign %s', id, self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
-        self.logger.debug(response.json())
+        self.logger.debug(response)
         return True

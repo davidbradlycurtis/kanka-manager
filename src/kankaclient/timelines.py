@@ -51,7 +51,7 @@ class TimelineAPI(BaseManager):
 
         if not response.ok:
             self.logger.error('Failed to retrieve timelines from campaign %s', self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         timelines = json.loads(response.text).get('data')
         self.logger.debug(response.json())
@@ -59,12 +59,12 @@ class TimelineAPI(BaseManager):
         return timelines
 
 
-    def get_timeline(self, name: str) -> dict:
+    def get_timeline(self, name_or_id: str or int) -> dict:
         """
         Retrives the desired timeline by name
 
         Args:
-            name (str): the name of the timeline
+            name_or_id (str or int): the name or id of the timeline
 
         Raises:
             KankaException: Kanka Api Interface Exception
@@ -73,14 +73,18 @@ class TimelineAPI(BaseManager):
             timeline: the requested timeline
         """
         timeline = None
-        timelines = self.get_timelines()
-        for _timeline in timelines:
-            if _timeline.get('name') == name:
-                timeline = _timeline
-                break
+        if type(name_or_id) is int:
+            timeline = self.get_timeline_by_id(name_or_id)
+        else:
+            timelines = self.get_timelines()
+            for _timeline in timelines:
+                if _timeline.get('name') == name_or_id:
+                    timeline = _timeline
+                    break
 
         if timeline is None:
-            raise self.KankaException(reason=None, code=404, message=f'timeline not found: {name}')
+            # TODO: Fix this exception message in each api
+            raise self.KankaException(reason=None, code=404, message=f'Timeline not found: {name_or_id}')
 
         return timeline
 
@@ -98,11 +102,11 @@ class TimelineAPI(BaseManager):
         Returns:
             timeline: the requested timeline
         """
-        response = self._request(url=GET_UPDATE_DELETE_SINGLE, request=GET)
+        response = self._request(url=GET_UPDATE_DELETE_SINGLE % id, request=GET)
 
         if not response.ok:
             self.logger.error('Failed to retrieve timeline %s from campaign %s', id, self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         timeline = json.loads(response.text).get('data')
         self.logger.debug(response.json())
@@ -123,11 +127,11 @@ class TimelineAPI(BaseManager):
         Returns:
             timeline: the created timeline
         """
-        response = self._request(url=GET_UPDATE_DELETE_SINGLE, request=POST, body=timeline)
+        response = self._request(url=GET_ALL_CREATE_SINGLE, request=POST, data=json.dumps(timeline))
 
         if not response.ok:
             self.logger.error('Failed to create timeline %s in campaign %s', timeline.get('name', 'None'), self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         timeline = json.loads(response.text).get('data')
         self.logger.debug(response.json())
@@ -148,11 +152,11 @@ class TimelineAPI(BaseManager):
         Returns:
             timeline: the updated timeline
         """
-        response = self._request(url=GET_UPDATE_DELETE_SINGLE, request=PUT, body=timeline)
+        response = self._request(url=GET_UPDATE_DELETE_SINGLE % timeline.get('id'), request=PUT, data=json.dumps(timeline))
 
         if not response.ok:
             self.logger.error('Failed to update timeline %s in campaign %s', timeline.get('name', 'None'), self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         timeline = json.loads(response.text).get('data')
         self.logger.debug(response.json())
@@ -173,11 +177,11 @@ class TimelineAPI(BaseManager):
         Returns:
             bool: whether the timeline is successfully deleted
         """
-        response = self._request(url=GET_UPDATE_DELETE_SINGLE, request=DELETE)
+        response = self._request(url=GET_UPDATE_DELETE_SINGLE % id, request=DELETE)
 
         if not response.ok:
             self.logger.error('Failed to delete timeline %s in campaign %s', id, self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
-        self.logger.debug(response.json())
+        self.logger.debug(response)
         return True

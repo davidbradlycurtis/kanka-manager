@@ -51,7 +51,7 @@ class FamilyAPI(BaseManager):
 
         if not response.ok:
             self.logger.error('Failed to retrieve families from campaign %s', self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         families = json.loads(response.text).get('data')
         self.logger.debug(response.json())
@@ -59,12 +59,12 @@ class FamilyAPI(BaseManager):
         return families
 
 
-    def get_family(self, name: str) -> dict:
+    def get_family(self, name_or_id: str or int) -> dict:
         """
         Retrives the desired family by name
 
         Args:
-            name (str): the name of the family
+            name_or_id (str or int): the name or id of the family
 
         Raises:
             KankaException: Kanka Api Interface Exception
@@ -73,14 +73,17 @@ class FamilyAPI(BaseManager):
             family: the requested family
         """
         family = None
-        families = self.get_families()
-        for _family in families:
-            if _family.get('name') == name:
-                family = _family
-                break
+        if type(name_or_id) is int:
+            family = self.get_family_by_id(name_or_id)
+        else:
+            families = self.get_families()
+            for _family in families:
+                if _family.get('name') == name_or_id:
+                    family = _family
+                    break
 
         if family is None:
-            raise self.KankaException(reason=None, code=404, message=f'family not found: {name}')
+            raise self.KankaException(reason=None, code=404, message=f'Family not found: {name_or_id}')
 
         return family
 
@@ -98,11 +101,11 @@ class FamilyAPI(BaseManager):
         Returns:
             family: the requested family
         """
-        response = self._request(url=GET_UPDATE_DELETE_SINGLE, request=GET)
+        response = self._request(url=GET_UPDATE_DELETE_SINGLE % id, request=GET)
 
         if not response.ok:
             self.logger.error('Failed to retrieve family %s from campaign %s', id, self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         family = json.loads(response.text).get('data')
         self.logger.debug(response.json())
@@ -123,11 +126,11 @@ class FamilyAPI(BaseManager):
         Returns:
             family: the created family
         """
-        response = self._request(url=GET_UPDATE_DELETE_SINGLE, request=POST, body=family)
+        response = self._request(url=GET_ALL_CREATE_SINGLE, request=POST, data=json.dumps(family))
 
         if not response.ok:
             self.logger.error('Failed to create family %s in campaign %s', family.get('name', 'None'), self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         family = json.loads(response.text).get('data')
         self.logger.debug(response.json())
@@ -148,11 +151,11 @@ class FamilyAPI(BaseManager):
         Returns:
             family: the updated family
         """
-        response = self._request(url=GET_UPDATE_DELETE_SINGLE, request=PUT, body=family)
+        response = self._request(url=GET_UPDATE_DELETE_SINGLE % family.get('id'), request=PUT, data=json.dumps(family))
 
         if not response.ok:
             self.logger.error('Failed to update family %s in campaign %s', family.get('name', 'None'), self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         family = json.loads(response.text).get('data')
         self.logger.debug(response.json())
@@ -173,11 +176,11 @@ class FamilyAPI(BaseManager):
         Returns:
             bool: whether the family is successfully deleted
         """
-        response = self._request(url=GET_UPDATE_DELETE_SINGLE, request=DELETE)
+        response = self._request(url=GET_UPDATE_DELETE_SINGLE % id, request=DELETE)
 
         if not response.ok:
             self.logger.error('Failed to delete family %s in campaign %s', id, self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
-        self.logger.debug(response.json())
+        self.logger.debug(response)
         return True

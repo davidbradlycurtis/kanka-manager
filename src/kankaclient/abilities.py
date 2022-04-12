@@ -51,7 +51,7 @@ class AbilityAPI(BaseManager):
 
         if not response.ok:
             self.logger.error('Failed to retrieve abilities from campaign %s', self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         abilities = json.loads(response.text).get('data')
         self.logger.debug(response.json())
@@ -59,12 +59,12 @@ class AbilityAPI(BaseManager):
         return abilities
 
 
-    def get_ability(self, name: str) -> dict:
+    def get_ability(self, name_or_id: str or int) -> dict:
         """
         Retrives the desired ability by name
 
         Args:
-            name (str): the name of the ability
+            name_or_id (str or int): the name or id of the ability
 
         Raises:
             KankaException: Kanka Api Interface Exception
@@ -73,14 +73,17 @@ class AbilityAPI(BaseManager):
             ability: the requested ability
         """
         ability = None
-        abilities = self.get_abilities()
-        for _ability in abilities:
-            if _ability.get('name') == name:
-                ability = _ability
-                break
+        if type(name_or_id) is int:
+            ability = self.get_ability_by_id(name_or_id)
+        else:
+            abilities = self.get_abilities()
+            for _ability in abilities:
+                if _ability.get('name') == name_or_id:
+                    ability = _ability
+                    break
 
         if ability is None:
-            raise self.KankaException(reason=None, code=404, message=f'ability not found: {name}')
+            raise self.KankaException(reason=None, code=404, message=f'Ability not found: {name_or_id}')
 
         return ability
 
@@ -102,7 +105,7 @@ class AbilityAPI(BaseManager):
 
         if not response.ok:
             self.logger.error('Failed to retrieve ability %s from campaign %s', id, self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         ability = json.loads(response.text).get('data')
         self.logger.debug(response.json())
@@ -123,11 +126,11 @@ class AbilityAPI(BaseManager):
         Returns:
             ability: the created ability
         """
-        response = self._request(url=GET_UPDATE_DELETE_SINGLE, request=POST, data=json.dumps(ability))
+        response = self._request(url=GET_ALL_CREATE_SINGLE, request=POST, data=json.dumps(ability))
 
         if not response.ok:
             self.logger.error('Failed to create ability %s in campaign %s', ability.get('name', 'None'), self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         ability = json.loads(response.text).get('data')
         self.logger.debug(response.json())
@@ -152,7 +155,7 @@ class AbilityAPI(BaseManager):
 
         if not response.ok:
             self.logger.error('Failed to update ability %s in campaign %s', ability.get('name', 'None'), self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         ability = json.loads(response.text).get('data')
         self.logger.debug(response.json())
@@ -177,7 +180,7 @@ class AbilityAPI(BaseManager):
 
         if not response.ok:
             self.logger.error('Failed to delete ability %s in campaign %s', id, self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         self.logger.debug(response)
         return True

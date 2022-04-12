@@ -89,4 +89,4 @@ class BaseManager():
         def __init__(self, reason, code, message):
             self.reason = reason
             self.code = code
-            self.message = message['errors'][0]['message']
+            self.message = message

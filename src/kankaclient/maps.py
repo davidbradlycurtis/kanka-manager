@@ -51,7 +51,7 @@ class MapAPI(BaseManager):
 
         if not response.ok:
             self.logger.error('Failed to retrieve maps from campaign %s', self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         maps = json.loads(response.text).get('data')
         self.logger.debug(response.json())
@@ -59,12 +59,12 @@ class MapAPI(BaseManager):
         return maps
 
 
-    def get_map(self, name: str) -> dict:
+    def get_map(self, name_or_id: str or int) -> dict:
         """
         Retrives the desired map by name
 
         Args:
-            name (str): the name of the map
+            name_or_id (str or int): the name or id of the map
 
         Raises:
             KankaException: Kanka Api Interface Exception
@@ -73,14 +73,18 @@ class MapAPI(BaseManager):
             map: the requested map
         """
         map = None
-        maps = self.get_maps()
-        for _map in maps:
-            if _map.get('name') == name:
-                map = _map
-                break
+        if type(name_or_id) is int:
+            map = self.get_map_by_id(name_or_id)
+        else:
+            maps = self.get_maps()
+            for _map in maps:
+                if _map.get('name') == name_or_id:
+                    map = _map
+                    break
 
         if map is None:
-            raise self.KankaException(reason=None, code=404, message=f'map not found: {name}')
+            # TODO: Fix this exception message in each api
+            raise self.KankaException(reason=None, code=404, message=f'Map not found: {name_or_id}')
 
         return map
 
@@ -98,11 +102,11 @@ class MapAPI(BaseManager):
         Returns:
             map: the requested map
         """
-        response = self._request(url=GET_UPDATE_DELETE_SINGLE, request=GET)
+        response = self._request(url=GET_UPDATE_DELETE_SINGLE % id, request=GET)
 
         if not response.ok:
             self.logger.error('Failed to retrieve map %s from campaign %s', id, self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         map = json.loads(response.text).get('data')
         self.logger.debug(response.json())
@@ -123,11 +127,11 @@ class MapAPI(BaseManager):
         Returns:
             map: the created map
         """
-        response = self._request(url=GET_UPDATE_DELETE_SINGLE, request=POST, body=map)
+        response = self._request(url=GET_ALL_CREATE_SINGLE, request=POST, data=json.dumps(map))
 
         if not response.ok:
             self.logger.error('Failed to create map %s in campaign %s', map.get('name', 'None'), self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         map = json.loads(response.text).get('data')
         self.logger.debug(response.json())
@@ -148,11 +152,11 @@ class MapAPI(BaseManager):
         Returns:
             map: the updated map
         """
-        response = self._request(url=GET_UPDATE_DELETE_SINGLE, request=PUT, body=map)
+        response = self._request(url=GET_UPDATE_DELETE_SINGLE % map.get('id'), request=PUT, data=json.dumps(map))
 
         if not response.ok:
             self.logger.error('Failed to update map %s in campaign %s', map.get('name', 'None'), self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         map = json.loads(response.text).get('data')
         self.logger.debug(response.json())
@@ -173,11 +177,11 @@ class MapAPI(BaseManager):
         Returns:
             bool: whether the map is successfully deleted
         """
-        response = self._request(url=GET_UPDATE_DELETE_SINGLE, request=DELETE)
+        response = self._request(url=GET_UPDATE_DELETE_SINGLE % id, request=DELETE)
 
         if not response.ok:
             self.logger.error('Failed to delete map %s in campaign %s', id, self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
-        self.logger.debug(response.json())
+        self.logger.debug(response)
         return True

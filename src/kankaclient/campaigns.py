@@ -37,13 +37,13 @@ class CampaignAPI(BaseManager):
 
     def get_campaigns(self) -> list:
         """
-        Retrives the projects in the current context
+        Retrieves the available campaigns from Kanka
 
         Raises:
             KankaException: Kanka Api Interface Exception
 
         Returns:
-            campaigns (list): a list of available campaigns
+            campaigns: the requested campaigns
         """
         if self.campaigns:
             return self.campaigns
@@ -52,21 +52,21 @@ class CampaignAPI(BaseManager):
         response = self._request(url=self.GET_ALL, request=GET)
 
         if not response.ok:
-            self.logger.error('Failed to retrieve campaigns from host')
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            self.logger.error('Failed to retrieve campaigns %s', self.campaign.get('name'))
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         campaigns = json.loads(response.text).get('data')
-        self.logger.debug(response)
+        self.logger.debug(response.json())
 
         return campaigns
 
 
-    def get_campaign(self, name: str) -> dict:
+    def get_campaign(self, name_or_id: str or int) -> dict:
         """
         Retrives the desired campaign by name
 
         Args:
-            name (str): the name of the campaign
+            name_or_id (str or int): the name or id of the campaign
 
         Raises:
             KankaException: Kanka Api Interface Exception
@@ -75,14 +75,18 @@ class CampaignAPI(BaseManager):
             campaign: the requested campaign
         """
         campaign = None
-        campaigns = self.get_campaigns()
-        for _campaign in campaigns:
-            if _campaign.get('name') == name:
-                campaign = _campaign
-                break
-        
+        if type(name_or_id) is int:
+            campaign = self.get_campaign_by_id(name_or_id)
+        else:
+            campaigns = self.get_campaigns()
+            for _campaign in campaigns:
+                if _campaign.get('name') == name_or_id:
+                    campaign = _campaign
+                    break
+
         if campaign is None:
-            raise self.KankaException(reason=None, code=404, message=f'Campaign not found: {name}')
+            # TODO: Fix this exception message in each api
+            raise self.KankaException(reason=None, code=404, message=f'Campaign not found: {name_or_id}')
 
         return campaign
 
@@ -98,11 +102,11 @@ class CampaignAPI(BaseManager):
             members (list): a list of available members
         """
         members = list()
-        response = self._request(url=self.GET_ALL, request=GET)
+        response = self._request(url=self.GET_MEMBERS, request=GET)
 
         if not response.ok:
             self.logger.error('Failed to retrieve members from campaign: ', self.campaign.get('name'))
-            raise self.KankaException(response.reason, response.status_code, message=response.json())
+            raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         members = json.loads(response.text).get('data')
         self.logger.debug(response)

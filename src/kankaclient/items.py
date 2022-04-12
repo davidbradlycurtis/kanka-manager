@@ -83,7 +83,7 @@ class ItemAPI(BaseManager):
                     break
 
         if item is None:
-            raise self.KankaException(reason=None, code=404, message=f'Item not found: {name_or_id}')
+            raise self.KankaException(reason=f'Item not found: {name_or_id}', code=404, message='Not Found')
 
         return item
 

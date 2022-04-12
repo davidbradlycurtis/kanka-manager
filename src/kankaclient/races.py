@@ -83,8 +83,7 @@ class RaceAPI(BaseManager):
                     break
 
         if race is None:
-            # TODO: Fix this exception message in each api
-            raise self.KankaException(reason=None, code=404, message=f'Race not found: {name_or_id}')
+            raise self.KankaException(reason=f'Race not found: {name_or_id}', code=404, message='Not Found')
 
         return race
 

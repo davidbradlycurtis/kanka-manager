@@ -83,7 +83,7 @@ class ConversationAPI(BaseManager):
                     break
 
         if conversation is None:
-            raise self.KankaException(reason=None, code=404, message=f'Conversation not found: {name_or_id}')
+            raise self.KankaException(reason=f'Conversation not found: {name_or_id}', code=404, message='Not Found')
 
         return conversation
 

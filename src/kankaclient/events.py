@@ -83,7 +83,7 @@ class EventAPI(BaseManager):
                     break
 
         if event is None:
-            raise self.KankaException(reason=None, code=404, message=f'Event not found: {name_or_id}')
+            raise self.KankaException(reason=f'Event not found: {name_or_id}', code=404, message='Not Found')
 
         return event
 

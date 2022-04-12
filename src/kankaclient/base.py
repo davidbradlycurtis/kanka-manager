@@ -52,7 +52,8 @@ class BaseManager():
 
             response = request(**kwargs)
 
-            if response.status_code != 429 :
+            # Check if response has been throttled by Kanka API
+            if response.status_code != 429:
                 break
 
             self.logger.debug(f'{response}: Too many requests, trying again')

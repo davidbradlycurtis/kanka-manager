@@ -83,7 +83,7 @@ class JournalAPI(BaseManager):
                     break
 
         if journal is None:
-            raise self.KankaException(reason=None, code=404, message=f'Journal not found: {name_or_id}')
+            raise self.KankaException(reason=f'Journal not found: {name_or_id}', code=404, message='Not Found')
 
         return journal
 

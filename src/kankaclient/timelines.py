@@ -83,8 +83,7 @@ class TimelineAPI(BaseManager):
                     break
 
         if timeline is None:
-            # TODO: Fix this exception message in each api
-            raise self.KankaException(reason=None, code=404, message=f'Timeline not found: {name_or_id}')
+            raise self.KankaException(reason=f'Timeline not found: {name_or_id}', code=404, message='Not Found')
 
         return timeline
 

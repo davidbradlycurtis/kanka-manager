@@ -83,7 +83,7 @@ class LocationAPI(BaseManager):
                     break
 
         if location is None:
-            raise self.KankaException(reason=None, code=404, message=f'Location not found: {name_or_id}')
+            raise self.KankaException(reason=f'Location not found: {name_or_id}', code=404, message='Not Found')
 
         return location
 

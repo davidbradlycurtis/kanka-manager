@@ -83,7 +83,7 @@ class DiceRollAPI(BaseManager):
                     break
 
         if dice_roll is None:
-            raise self.KankaException(reason=None, code=404, message=f'Dice roll not found: {name_or_id}')
+            raise self.KankaException(reason=f'Dice roll not found: {name_or_id}', code=404, message='Not Found')
 
         return dice_roll
 

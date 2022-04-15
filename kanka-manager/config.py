@@ -1,0 +1,6 @@
+COMMANDS = [
+    'get'
+]
+ENTITIES = [
+    'character'
+]

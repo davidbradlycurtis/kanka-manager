@@ -1,5 +1,5 @@
 from arguments import get_parser
-from kankaclient.kankaclient import KankaClient
+from kankaclient.client import KankaClient
 
 def main():
     args = get_parser()

@@ -33,7 +33,7 @@ class JournalAPI(BaseManager):
             self.logger.setLevel(logging.DEBUG)
 
 
-    def get_journals(self) -> list:
+    def get_all(self) -> list:
         """
         Retrieves the available journals from Kanka
 
@@ -59,7 +59,7 @@ class JournalAPI(BaseManager):
         return journals
 
 
-    def get_journal(self, name_or_id: str or int) -> dict:
+    def get(self, name_or_id: str or int) -> dict:
         """
         Retrives the desired journal by name
 
@@ -76,7 +76,7 @@ class JournalAPI(BaseManager):
         if type(name_or_id) is int:
             journal = self.get_journal_by_id(name_or_id)
         else:
-            journals = self.get_journals()
+            journals = self.get()
             for _journal in journals:
                 if _journal.get('name') == name_or_id:
                     journal = _journal
@@ -113,7 +113,7 @@ class JournalAPI(BaseManager):
         return journal
 
 
-    def create_journal(self, journal: dict) -> dict:
+    def create(self, journal: dict) -> dict:
         """
         Creates the provided journal in Kanka
 
@@ -138,7 +138,7 @@ class JournalAPI(BaseManager):
         return journal
 
 
-    def update_journal(self, journal: dict) -> dict:
+    def update(self, journal: dict) -> dict:
         """
         Updates the provided journal in Kanka
 
@@ -163,7 +163,7 @@ class JournalAPI(BaseManager):
         return journal
 
 
-    def delete_journal(self, id: int) -> bool:
+    def delete(self, id: int) -> bool:
         """
         Deletes the provided journal in Kanka
 

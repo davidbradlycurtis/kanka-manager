@@ -33,7 +33,7 @@ class TimelineAPI(BaseManager):
             self.logger.setLevel(logging.DEBUG)
 
 
-    def get_timelines(self) -> list:
+    def get_all(self) -> list:
         """
         Retrieves the available timelines from Kanka
 
@@ -59,7 +59,7 @@ class TimelineAPI(BaseManager):
         return timelines
 
 
-    def get_timeline(self, name_or_id: str or int) -> dict:
+    def get(self, name_or_id: str or int) -> dict:
         """
         Retrives the desired timeline by name
 
@@ -76,7 +76,7 @@ class TimelineAPI(BaseManager):
         if type(name_or_id) is int:
             timeline = self.get_timeline_by_id(name_or_id)
         else:
-            timelines = self.get_timelines()
+            timelines = self.get()
             for _timeline in timelines:
                 if _timeline.get('name') == name_or_id:
                     timeline = _timeline
@@ -113,7 +113,7 @@ class TimelineAPI(BaseManager):
         return timeline
 
 
-    def create_timeline(self, timeline: dict) -> dict:
+    def create(self, timeline: dict) -> dict:
         """
         Creates the provided timeline in Kanka
 
@@ -138,7 +138,7 @@ class TimelineAPI(BaseManager):
         return timeline
 
 
-    def update_timeline(self, timeline: dict) -> dict:
+    def update(self, timeline: dict) -> dict:
         """
         Updates the provided timeline in Kanka
 
@@ -163,7 +163,7 @@ class TimelineAPI(BaseManager):
         return timeline
 
 
-    def delete_timeline(self, id: int) -> bool:
+    def delete(self, id: int) -> bool:
         """
         Deletes the provided timeline in Kanka
 

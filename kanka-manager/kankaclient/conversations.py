@@ -33,7 +33,7 @@ class ConversationAPI(BaseManager):
             self.logger.setLevel(logging.DEBUG)
 
 
-    def get_conversations(self) -> list:
+    def get_all(self) -> list:
         """
         Retrieves the available conversations from Kanka
 
@@ -59,7 +59,7 @@ class ConversationAPI(BaseManager):
         return conversations
 
 
-    def get_conversation(self, name_or_id: str or int) -> dict:
+    def get(self, name_or_id: str or int) -> dict:
         """
         Retrives the desired conversation by name
 
@@ -76,7 +76,7 @@ class ConversationAPI(BaseManager):
         if type(name_or_id) is int:
             conversation = self.get_conversation_by_id(name_or_id)
         else:
-            conversations = self.get_conversations()
+            conversations = self.get()
             for _conversation in conversations:
                 if _conversation.get('name') == name_or_id:
                     conversation = _conversation
@@ -113,7 +113,7 @@ class ConversationAPI(BaseManager):
         return conversation
 
 
-    def create_conversation(self, conversation: dict) -> dict:
+    def create(self, conversation: dict) -> dict:
         """
         Creates the provided conversation in Kanka
 
@@ -138,7 +138,7 @@ class ConversationAPI(BaseManager):
         return conversation
 
 
-    def update_conversation(self, conversation: dict) -> dict:
+    def update(self, conversation: dict) -> dict:
         """
         Updates the provided conversation in Kanka
 
@@ -163,7 +163,7 @@ class ConversationAPI(BaseManager):
         return conversation
 
 
-    def delete_conversation(self, id: int) -> bool:
+    def delete(self, id: int) -> bool:
         """
         Deletes the provided conversation in Kanka
 

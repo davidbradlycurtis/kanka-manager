@@ -33,7 +33,7 @@ class NoteAPI(BaseManager):
             self.logger.setLevel(logging.DEBUG)
 
 
-    def get_notes(self) -> list:
+    def get_all(self) -> list:
         """
         Retrieves the available notes from Kanka
 
@@ -59,7 +59,7 @@ class NoteAPI(BaseManager):
         return notes
 
 
-    def get_note(self, name_or_id: str or int) -> dict:
+    def get(self, name_or_id: str or int) -> dict:
         """
         Retrives the desired note by name
 
@@ -76,7 +76,7 @@ class NoteAPI(BaseManager):
         if type(name_or_id) is int:
             note = self.get_note_by_id(name_or_id)
         else:
-            notes = self.get_notes()
+            notes = self.get()
             for _note in notes:
                 if _note.get('name') == name_or_id:
                     note = _note
@@ -113,7 +113,7 @@ class NoteAPI(BaseManager):
         return note
 
 
-    def create_note(self, note: dict) -> dict:
+    def create(self, note: dict) -> dict:
         """
         Creates the provided note in Kanka
 
@@ -138,7 +138,7 @@ class NoteAPI(BaseManager):
         return note
 
 
-    def update_note(self, note: dict) -> dict:
+    def update(self, note: dict) -> dict:
         """
         Updates the provided note in Kanka
 
@@ -163,7 +163,7 @@ class NoteAPI(BaseManager):
         return note
 
 
-    def delete_note(self, id: int) -> bool:
+    def delete(self, id: int) -> bool:
         """
         Deletes the provided note in Kanka
 

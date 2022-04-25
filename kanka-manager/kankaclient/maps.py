@@ -33,7 +33,7 @@ class MapAPI(BaseManager):
             self.logger.setLevel(logging.DEBUG)
 
 
-    def get_maps(self) -> list:
+    def get_all(self) -> list:
         """
         Retrieves the available maps from Kanka
 
@@ -59,7 +59,7 @@ class MapAPI(BaseManager):
         return maps
 
 
-    def get_map(self, name_or_id: str or int) -> dict:
+    def get(self, name_or_id: str or int) -> dict:
         """
         Retrives the desired map by name
 
@@ -76,7 +76,7 @@ class MapAPI(BaseManager):
         if type(name_or_id) is int:
             map = self.get_map_by_id(name_or_id)
         else:
-            maps = self.get_maps()
+            maps = self.get()
             for _map in maps:
                 if _map.get('name') == name_or_id:
                     map = _map
@@ -113,7 +113,7 @@ class MapAPI(BaseManager):
         return map
 
 
-    def create_map(self, map: dict) -> dict:
+    def create(self, map: dict) -> dict:
         """
         Creates the provided map in Kanka
 
@@ -138,7 +138,7 @@ class MapAPI(BaseManager):
         return map
 
 
-    def update_map(self, map: dict) -> dict:
+    def update(self, map: dict) -> dict:
         """
         Updates the provided map in Kanka
 
@@ -163,7 +163,7 @@ class MapAPI(BaseManager):
         return map
 
 
-    def delete_map(self, id: int) -> bool:
+    def delete(self, id: int) -> bool:
         """
         Deletes the provided map in Kanka
 

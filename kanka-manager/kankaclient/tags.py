@@ -33,7 +33,7 @@ class TagAPI(BaseManager):
             self.logger.setLevel(logging.DEBUG)
 
 
-    def get_tags(self) -> list:
+    def get_all(self) -> list:
         """
         Retrieves the available tags from Kanka
 
@@ -59,7 +59,7 @@ class TagAPI(BaseManager):
         return tags
 
 
-    def get_tag(self, name_or_id: str or int) -> dict:
+    def get(self, name_or_id: str or int) -> dict:
         """
         Retrives the desired tag by name
 
@@ -76,7 +76,7 @@ class TagAPI(BaseManager):
         if type(name_or_id) is int:
             tag = self.get_tag_by_id(name_or_id)
         else:
-            tags = self.get_tags()
+            tags = self.get()
             for _tag in tags:
                 if _tag.get('name') == name_or_id:
                     tag = _tag
@@ -113,7 +113,7 @@ class TagAPI(BaseManager):
         return tag
 
 
-    def create_tag(self, tag: dict) -> dict:
+    def create(self, tag: dict) -> dict:
         """
         Creates the provided tag in Kanka
 
@@ -138,7 +138,7 @@ class TagAPI(BaseManager):
         return tag
 
 
-    def update_tag(self, tag: dict) -> dict:
+    def update(self, tag: dict) -> dict:
         """
         Updates the provided tag in Kanka
 
@@ -163,7 +163,7 @@ class TagAPI(BaseManager):
         return tag
 
 
-    def delete_tag(self, id: int) -> bool:
+    def delete(self, id: int) -> bool:
         """
         Deletes the provided tag in Kanka
 

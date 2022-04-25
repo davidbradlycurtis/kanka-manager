@@ -33,7 +33,7 @@ class CharacterAPI(BaseManager):
             self.logger.setLevel(logging.DEBUG)
 
 
-    def get_characters(self) -> list:
+    def get_all(self) -> list:
         """
         Retrieves the available characters from Kanka
 
@@ -59,7 +59,7 @@ class CharacterAPI(BaseManager):
         return characters
 
 
-    def get_character(self, name_or_id: str or int) -> dict:
+    def get(self, name_or_id: str or int) -> dict:
         """
         Retrives the desired character by name
 
@@ -76,7 +76,7 @@ class CharacterAPI(BaseManager):
         if type(name_or_id) is int:
             character = self.get_character_by_id(name_or_id)
         else:
-            characters = self.get_characters()
+            characters = self.get_all()
             for _character in characters:
                 if _character.get('name') == name_or_id:
                     character = _character
@@ -113,7 +113,7 @@ class CharacterAPI(BaseManager):
         return character
 
 
-    def create_character(self, character: dict) -> dict:
+    def create(self, character: dict) -> dict:
         """
         Creates the provided character in Kanka
 
@@ -138,7 +138,7 @@ class CharacterAPI(BaseManager):
         return character
 
 
-    def update_character(self, character: dict) -> dict:
+    def update(self, character: dict) -> dict:
         """
         Updates the provided character in Kanka
 
@@ -163,7 +163,7 @@ class CharacterAPI(BaseManager):
         return character
 
 
-    def delete_character(self, id: int) -> bool:
+    def delete(self, id: int) -> bool:
         """
         Deletes the provided character in Kanka
 

@@ -23,7 +23,7 @@ class CampaignAPI(BaseManager):
         self.logger = logging.getLogger(self.__class__.__name__)
         self.campaigns = None
 
-        self.campaign = self.get_campaign(campaign)
+        self.campaign = self.get(campaign)
         campaign_id = self.campaign.get('id')
 
         global GET_SINGLE
@@ -35,7 +35,7 @@ class CampaignAPI(BaseManager):
             self.logger.setLevel(logging.DEBUG)
 
 
-    def get_campaigns(self) -> list:
+    def get_all(self) -> list:
         """
         Retrieves the available campaigns from Kanka
 
@@ -61,7 +61,7 @@ class CampaignAPI(BaseManager):
         return campaigns
 
 
-    def get_campaign(self, name_or_id: str or int) -> dict:
+    def get(self, name_or_id: str or int) -> dict:
         """
         Retrives the desired campaign by name
 
@@ -78,7 +78,7 @@ class CampaignAPI(BaseManager):
         if type(name_or_id) is int:
             campaign = self.get_campaign_by_id(name_or_id)
         else:
-            campaigns = self.get_campaigns()
+            campaigns = self.get_all()
             for _campaign in campaigns:
                 if _campaign.get('name') == name_or_id:
                     campaign = _campaign

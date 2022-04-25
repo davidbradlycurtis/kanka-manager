@@ -31,6 +31,8 @@ from kankaclient.timelines import TimelineAPI
 class KankaClient(BaseManager):
     """Kanka Client"""
 
+    entities: dict
+
     def __init__(self, token: str, campaign: str, verbose: str=False):
         super().__init__(token=token, verbose=verbose)
         self.logger = logging.getLogger(self.__class__.__name__)
@@ -49,12 +51,46 @@ class KankaClient(BaseManager):
         self.maps = MapAPI(token=token, campaign=self.campaigns.campaign, verbose=verbose)
         self.organizations = OrganizationAPI(token=token, campaign=self.campaigns.campaign, verbose=verbose)
         self.quests = QuestAPI(token=token, campaign=self.campaigns.campaign, verbose=verbose)
-        self.organizations = RaceAPI(token=token, campaign=self.campaigns.campaign, verbose=verbose)
-        self.races = TagAPI(token=token, campaign=self.campaigns.campaign, verbose=verbose)
+        self.races = RaceAPI(token=token, campaign=self.campaigns.campaign, verbose=verbose)
+        self.tags = TagAPI(token=token, campaign=self.campaigns.campaign, verbose=verbose)
         self.timelines = TimelineAPI(token=token, campaign=self.campaigns.campaign, verbose=verbose)
 
+        global entities
+        entities = {
+            'campaign': self.campaigns,
+            'abilities': self.abilities,
+            'calendars': self.calendars,
+            'character': self.characters,
+            'conversations': self.conversations,
+            'dice': self.dice,
+            'events': self.events,
+            'families': self.families,
+            'items': self.items,
+            'journals': self.journals,
+            'locations': self.locations,
+            'maps': self.maps,
+            'organizations': self.organizations,
+            'quests': self.quests,
+            'races': self.races,
+            'tags': self.tags,
+            'timelines': self.timelines
+        }
 
         if verbose:
             self.logger.setLevel(logging.DEBUG)
 
         self.logger.debug('Kanka Client initialized')
+
+    
+    def get(self, entity: str, **kwargs: str) -> dict:
+        """
+        TODO
+
+        Args:
+            entity (str): _description_
+
+        Returns:
+            dict: _description_
+        """
+        result = entities.get(entity).get(**kwargs)
+        return result

@@ -33,7 +33,7 @@ class LocationAPI(BaseManager):
             self.logger.setLevel(logging.DEBUG)
 
 
-    def get_locations(self) -> list:
+    def get_all(self) -> list:
         """
         Retrieves the available locations from Kanka
 
@@ -59,7 +59,7 @@ class LocationAPI(BaseManager):
         return locations
 
 
-    def get_location(self, name_or_id: str or int) -> dict:
+    def get(self, name_or_id: str or int) -> dict:
         """
         Retrives the desired location by name
 
@@ -76,7 +76,7 @@ class LocationAPI(BaseManager):
         if type(name_or_id) is int:
             location = self.get_location_by_id(name_or_id)
         else:
-            locations = self.get_locations()
+            locations = self.get()
             for _location in locations:
                 if _location.get('name') == name_or_id:
                     location = _location
@@ -113,7 +113,7 @@ class LocationAPI(BaseManager):
         return location
 
 
-    def create_location(self, location: dict) -> dict:
+    def create(self, location: dict) -> dict:
         """
         Creates the provided location in Kanka
 
@@ -138,7 +138,7 @@ class LocationAPI(BaseManager):
         return location
 
 
-    def update_location(self, location: dict) -> dict:
+    def update(self, location: dict) -> dict:
         """
         Updates the provided location in Kanka
 
@@ -163,7 +163,7 @@ class LocationAPI(BaseManager):
         return location
 
 
-    def delete_location(self, id: int) -> bool:
+    def delete(self, id: int) -> bool:
         """
         Deletes the provided location in Kanka
 

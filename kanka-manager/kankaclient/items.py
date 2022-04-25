@@ -33,7 +33,7 @@ class ItemAPI(BaseManager):
             self.logger.setLevel(logging.DEBUG)
 
 
-    def get_items(self) -> list:
+    def get_all(self) -> list:
         """
         Retrieves the available items from Kanka
 
@@ -59,7 +59,7 @@ class ItemAPI(BaseManager):
         return items
 
 
-    def get_item(self, name_or_id: str or int) -> dict:
+    def get(self, name_or_id: str or int) -> dict:
         """
         Retrives the desired item by name
 
@@ -76,7 +76,7 @@ class ItemAPI(BaseManager):
         if type(name_or_id) is int:
             item = self.get_item_by_id(name_or_id)
         else:
-            items = self.get_items()
+            items = self.get()
             for _item in items:
                 if _item.get('name') == name_or_id:
                     item = _item
@@ -113,7 +113,7 @@ class ItemAPI(BaseManager):
         return item
 
 
-    def create_item(self, item: dict) -> dict:
+    def create(self, item: dict) -> dict:
         """
         Creates the provided item in Kanka
 
@@ -138,7 +138,7 @@ class ItemAPI(BaseManager):
         return item
 
 
-    def update_item(self, item: dict) -> dict:
+    def update(self, item: dict) -> dict:
         """
         Updates the provided item in Kanka
 
@@ -163,7 +163,7 @@ class ItemAPI(BaseManager):
         return item
 
 
-    def delete_item(self, id: int) -> bool:
+    def delete(self, id: int) -> bool:
         """
         Deletes the provided item in Kanka
 

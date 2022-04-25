@@ -33,7 +33,7 @@ class CalendarAPI(BaseManager):
             self.logger.setLevel(logging.DEBUG)
 
 
-    def get_calendars(self) -> list:
+    def get_all(self) -> list:
         """
         Retrieves the available calendars from Kanka
 
@@ -59,7 +59,7 @@ class CalendarAPI(BaseManager):
         return calendars
 
 
-    def get_calendar(self, name_or_id: str or int) -> dict:
+    def get(self, name_or_id: str or int) -> dict:
         """
         Retrives the desired calendar by name
 
@@ -76,7 +76,7 @@ class CalendarAPI(BaseManager):
         if type(name_or_id) is int:
             calendar = self.get_calendar_by_id(name_or_id)
         else:
-            calendars = self.get_calendars()
+            calendars = self.get_all()
             for _calendar in calendars:
                 if _calendar.get('name') == name_or_id:
                     calendar = _calendar
@@ -113,7 +113,7 @@ class CalendarAPI(BaseManager):
         return calendar
 
 
-    def create_calendar(self, calendar: dict) -> dict:
+    def create(self, calendar: dict) -> dict:
         """
         Creates the provided calendar in Kanka
 
@@ -138,7 +138,7 @@ class CalendarAPI(BaseManager):
         return calendar
 
 
-    def update_calendar(self, calendar: dict) -> dict:
+    def update(self, calendar: dict) -> dict:
         """
         Updates the provided calendar in Kanka
 
@@ -163,7 +163,7 @@ class CalendarAPI(BaseManager):
         return calendar
 
 
-    def delete_calendar(self, id: int) -> bool:
+    def delete(self, id: int) -> bool:
         """
         Deletes the provided calendar in Kanka
 

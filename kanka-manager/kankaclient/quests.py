@@ -33,7 +33,7 @@ class QuestAPI(BaseManager):
             self.logger.setLevel(logging.DEBUG)
 
 
-    def get_quests(self) -> list:
+    def get_all(self) -> list:
         """
         Retrieves the available quests from Kanka
 
@@ -59,7 +59,7 @@ class QuestAPI(BaseManager):
         return quests
 
 
-    def get_quest(self, name_or_id: str or int) -> dict:
+    def get(self, name_or_id: str or int) -> dict:
         """
         Retrives the desired quest by name
 
@@ -76,7 +76,7 @@ class QuestAPI(BaseManager):
         if type(name_or_id) is int:
             quest = self.get_quest_by_id(name_or_id)
         else:
-            quests = self.get_quests()
+            quests = self.get()
             for _quest in quests:
                 if _quest.get('name') == name_or_id:
                     quest = _quest
@@ -113,7 +113,7 @@ class QuestAPI(BaseManager):
         return quest
 
 
-    def create_quest(self, quest: dict) -> dict:
+    def create(self, quest: dict) -> dict:
         """
         Creates the provided quest in Kanka
 
@@ -138,7 +138,7 @@ class QuestAPI(BaseManager):
         return quest
 
 
-    def update_quest(self, quest: dict) -> dict:
+    def update(self, quest: dict) -> dict:
         """
         Updates the provided quest in Kanka
 
@@ -163,7 +163,7 @@ class QuestAPI(BaseManager):
         return quest
 
 
-    def delete_quest(self, id: int) -> bool:
+    def delete(self, id: int) -> bool:
         """
         Deletes the provided quest in Kanka
 

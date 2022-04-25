@@ -33,7 +33,7 @@ class DiceRollAPI(BaseManager):
             self.logger.setLevel(logging.DEBUG)
 
 
-    def get_dice_rolls(self) -> list:
+    def get_all(self) -> list:
         """
         Retrieves the available dice_rolls from Kanka
 
@@ -59,7 +59,7 @@ class DiceRollAPI(BaseManager):
         return dice_rolls
 
 
-    def get_dice_roll(self, name_or_id: str or int) -> dict:
+    def get(self, name_or_id: str or int) -> dict:
         """
         Retrives the desired dice_roll by name
 
@@ -76,7 +76,7 @@ class DiceRollAPI(BaseManager):
         if type(name_or_id) is int:
             dice_roll = self.get_dice_roll_by_id(name_or_id)
         else:
-            dice_rolls = self.get_dice_rolls()
+            dice_rolls = self.get()
             for _dice_roll in dice_rolls:
                 if _dice_roll.get('name') == name_or_id:
                     dice_roll = _dice_roll
@@ -113,7 +113,7 @@ class DiceRollAPI(BaseManager):
         return dice_roll
 
 
-    def create_dice_roll(self, dice_roll: dict) -> dict:
+    def create(self, dice_roll: dict) -> dict:
         """
         Creates the provided dice_roll in Kanka
 
@@ -138,7 +138,7 @@ class DiceRollAPI(BaseManager):
         return dice_roll
 
 
-    def update_dice_roll(self, dice_roll: dict) -> dict:
+    def update(self, dice_roll: dict) -> dict:
         """
         Updates the provided dice_roll in Kanka
 
@@ -163,7 +163,7 @@ class DiceRollAPI(BaseManager):
         return dice_roll
 
 
-    def delete_dice_roll(self, id: int) -> bool:
+    def delete(self, id: int) -> bool:
         """
         Deletes the provided dice_roll in Kanka
 

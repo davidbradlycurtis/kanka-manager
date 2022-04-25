@@ -33,7 +33,7 @@ class OrganizationAPI(BaseManager):
             self.logger.setLevel(logging.DEBUG)
 
 
-    def get_organizations(self) -> list:
+    def get_all(self) -> list:
         """
         Retrieves the available organizations from Kanka
 
@@ -59,7 +59,7 @@ class OrganizationAPI(BaseManager):
         return organizations
 
 
-    def get_organization(self, name_or_id: str or int) -> dict:
+    def get(self, name_or_id: str or int) -> dict:
         """
         Retrives the desired organization by name
 
@@ -76,7 +76,7 @@ class OrganizationAPI(BaseManager):
         if type(name_or_id) is int:
             organization = self.get_organization_by_id(name_or_id)
         else:
-            organizations = self.get_organizations()
+            organizations = self.get()
             for _organization in organizations:
                 if _organization.get('name') == name_or_id:
                     organization = _organization
@@ -113,7 +113,7 @@ class OrganizationAPI(BaseManager):
         return organization
 
 
-    def create_organization(self, organization: dict) -> dict:
+    def create(self, organization: dict) -> dict:
         """
         Creates the provided organization in Kanka
 
@@ -138,7 +138,7 @@ class OrganizationAPI(BaseManager):
         return organization
 
 
-    def update_organization(self, organization: dict) -> dict:
+    def update(self, organization: dict) -> dict:
         """
         Updates the provided organization in Kanka
 
@@ -163,7 +163,7 @@ class OrganizationAPI(BaseManager):
         return organization
 
 
-    def delete_organization(self, id: int) -> bool:
+    def delete(self, id: int) -> bool:
         """
         Deletes the provided organization in Kanka
 

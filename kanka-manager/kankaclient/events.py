@@ -33,7 +33,7 @@ class EventAPI(BaseManager):
             self.logger.setLevel(logging.DEBUG)
 
 
-    def get_events(self) -> list:
+    def get_all(self) -> list:
         """
         Retrieves the available events from Kanka
 
@@ -59,7 +59,7 @@ class EventAPI(BaseManager):
         return events
 
 
-    def get_event(self, name_or_id: str or int) -> dict:
+    def get(self, name_or_id: str or int) -> dict:
         """
         Retrives the desired event by name
 
@@ -76,7 +76,7 @@ class EventAPI(BaseManager):
         if type(name_or_id) is int:
             event = self.get_event_by_id(name_or_id)
         else:
-            events = self.get_events()
+            events = self.get()
             for _event in events:
                 if _event.get('name') == name_or_id:
                     event = _event
@@ -113,7 +113,7 @@ class EventAPI(BaseManager):
         return event
 
 
-    def create_event(self, event: dict) -> dict:
+    def create(self, event: dict) -> dict:
         """
         Creates the provided event in Kanka
 
@@ -138,7 +138,7 @@ class EventAPI(BaseManager):
         return event
 
 
-    def update_event(self, event: dict) -> dict:
+    def update(self, event: dict) -> dict:
         """
         Updates the provided event in Kanka
 
@@ -163,7 +163,7 @@ class EventAPI(BaseManager):
         return event
 
 
-    def delete_event(self, id: int) -> bool:
+    def delete(self, id: int) -> bool:
         """
         Deletes the provided event in Kanka
 

@@ -33,7 +33,7 @@ class AbilityAPI(BaseManager):
             self.logger.setLevel(logging.DEBUG)
 
 
-    def get_abilities(self) -> list:
+    def get_all(self) -> list:
         """
         Retrieves the available abilities from Kanka
 
@@ -59,7 +59,7 @@ class AbilityAPI(BaseManager):
         return abilities
 
 
-    def get_ability(self, name_or_id: str or int) -> dict:
+    def get(self, name_or_id: str or int) -> dict:
         """
         Retrives the desired ability by name
 
@@ -76,7 +76,7 @@ class AbilityAPI(BaseManager):
         if type(name_or_id) is int:
             ability = self.get_ability_by_id(name_or_id)
         else:
-            abilities = self.get_abilities()
+            abilities = self.get_all()
             for _ability in abilities:
                 if _ability.get('name') == name_or_id:
                     ability = _ability
@@ -113,7 +113,7 @@ class AbilityAPI(BaseManager):
         return ability
 
 
-    def create_ability(self, ability: dict) -> dict:
+    def create(self, ability: dict) -> dict:
         """
         Creates the provided ability in Kanka
 
@@ -138,7 +138,7 @@ class AbilityAPI(BaseManager):
         return ability
 
 
-    def update_ability(self, ability: dict) -> dict:
+    def update(self, ability: dict) -> dict:
         """
         Updates the provided ability in Kanka
 
@@ -163,7 +163,7 @@ class AbilityAPI(BaseManager):
         return ability
 
 
-    def delete_ability(self, id: int) -> bool:
+    def delete(self, id: int) -> bool:
         """
         Deletes the provided ability in Kanka
 

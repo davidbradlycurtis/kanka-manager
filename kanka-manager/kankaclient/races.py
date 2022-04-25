@@ -33,7 +33,7 @@ class RaceAPI(BaseManager):
             self.logger.setLevel(logging.DEBUG)
 
 
-    def get_races(self) -> list:
+    def get_all(self) -> list:
         """
         Retrieves the available races from Kanka
 
@@ -59,7 +59,7 @@ class RaceAPI(BaseManager):
         return races
 
 
-    def get_race(self, name_or_id: str or int) -> dict:
+    def get(self, name_or_id: str or int) -> dict:
         """
         Retrives the desired race by name
 
@@ -76,7 +76,7 @@ class RaceAPI(BaseManager):
         if type(name_or_id) is int:
             race = self.get_race_by_id(name_or_id)
         else:
-            races = self.get_races()
+            races = self.get()
             for _race in races:
                 if _race.get('name') == name_or_id:
                     race = _race
@@ -113,7 +113,7 @@ class RaceAPI(BaseManager):
         return race
 
 
-    def create_race(self, race: dict) -> dict:
+    def create(self, race: dict) -> dict:
         """
         Creates the provided race in Kanka
 
@@ -138,7 +138,7 @@ class RaceAPI(BaseManager):
         return race
 
 
-    def update_race(self, race: dict) -> dict:
+    def update(self, race: dict) -> dict:
         """
         Updates the provided race in Kanka
 
@@ -163,7 +163,7 @@ class RaceAPI(BaseManager):
         return race
 
 
-    def delete_race(self, id: int) -> bool:
+    def delete(self, id: int) -> bool:
         """
         Deletes the provided race in Kanka
 

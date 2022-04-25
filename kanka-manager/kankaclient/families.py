@@ -33,7 +33,7 @@ class FamilyAPI(BaseManager):
             self.logger.setLevel(logging.DEBUG)
 
 
-    def get_families(self) -> list:
+    def get_all(self) -> list:
         """
         Retrieves the available families from Kanka
 
@@ -59,7 +59,7 @@ class FamilyAPI(BaseManager):
         return families
 
 
-    def get_family(self, name_or_id: str or int) -> dict:
+    def get(self, name_or_id: str or int) -> dict:
         """
         Retrives the desired family by name
 
@@ -76,7 +76,7 @@ class FamilyAPI(BaseManager):
         if type(name_or_id) is int:
             family = self.get_family_by_id(name_or_id)
         else:
-            families = self.get_families()
+            families = self.get()
             for _family in families:
                 if _family.get('name') == name_or_id:
                     family = _family
@@ -113,7 +113,7 @@ class FamilyAPI(BaseManager):
         return family
 
 
-    def create_family(self, family: dict) -> dict:
+    def create(self, family: dict) -> dict:
         """
         Creates the provided family in Kanka
 
@@ -138,7 +138,7 @@ class FamilyAPI(BaseManager):
         return family
 
 
-    def update_family(self, family: dict) -> dict:
+    def update(self, family: dict) -> dict:
         """
         Updates the provided family in Kanka
 
@@ -163,7 +163,7 @@ class FamilyAPI(BaseManager):
         return family
 
 
-    def delete_family(self, id: int) -> bool:
+    def delete(self, id: int) -> bool:
         """
         Deletes the provided family in Kanka
 

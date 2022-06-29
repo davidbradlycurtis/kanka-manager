@@ -14,7 +14,7 @@ def get_parser():
 
     parser_get = subparsers.add_parser('get', help='TODO')
     parser_get.add_argument('entity', action='store', type=str, help='TODO')
-    parser_get.add_argument('name', action='store', type=str, help='TODO')
+    parser_get.add_argument('-n', '--name', action='store', type=str, help='TODO')
     parser_get.add_argument('-c', '--clean', action='store_true', default=False, help='TODO')
     parser_get.add_argument('-o', '--output', action='store', type=str, choices=OUTPUT_OPTIONS, help='TODO')
 

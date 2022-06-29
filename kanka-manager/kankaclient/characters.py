@@ -58,6 +58,7 @@ class CharacterAPI(BaseManager):
         if verbose:
             self.logger.setLevel(logging.DEBUG)
 
+
     def get_all(self) -> list:
         """
         Retrieves the available characters from Kanka
@@ -91,6 +92,7 @@ class CharacterAPI(BaseManager):
 
         return characters
 
+
     def get(self, name_or_id: str or int) -> dict:
         """
         Retrives the desired character by name
@@ -123,7 +125,8 @@ class CharacterAPI(BaseManager):
 
         return character
 
-    def get_character_by_id(self, id: int, clean: bool=False) -> dict:
+
+    def get_character_by_id(self, id: int) -> dict:
         """
         Retrieves the requested character from Kanka
 
@@ -153,12 +156,13 @@ class CharacterAPI(BaseManager):
 
         return from_dict(data_class=Character, data=character)
 
-    def create(self, character: dict) -> dict:
+
+    def create(self, character: dict) -> Character:
         """
         Creates the provided character in Kanka
 
         Args:
-            character (dict): the character to create
+            character (Character or dict): the character to create
 
         Raises:
             KankaException: Kanka Api Interface Exception
@@ -183,14 +187,15 @@ class CharacterAPI(BaseManager):
         character = json.loads(response.text).get("data")
         self.logger.debug(response.json())
 
-        return character
+        return from_dict(data_class=Character, data=character)
 
-    def update(self, character: dict) -> dict:
+
+    def update(self, character: Character or dict) -> dict:
         """
         Updates the provided character in Kanka
 
         Args:
-            character (dict): the character to create
+            character (Character or dict): the character to update
 
         Raises:
             KankaException: Kanka Api Interface Exception
@@ -198,6 +203,9 @@ class CharacterAPI(BaseManager):
         Returns:
             character: the updated character
         """
+        if isinstance(character, Character):
+            character = character._asdict()
+
         response = self._request(
             url=GET_UPDATE_DELETE_SINGLE % character.get("id"),
             request=PUT,
@@ -218,6 +226,7 @@ class CharacterAPI(BaseManager):
         self.logger.debug(response.json())
 
         return character
+
 
     def delete(self, id: int) -> bool:
         """

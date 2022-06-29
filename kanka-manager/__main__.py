@@ -69,6 +69,26 @@ def init(args):
     return KankaClient(read_config(config_path))
 
 
+def create(args):
+    pass
+
+
+def delete(args):
+    pass
+
+
+def push(args):
+    pass
+
+
+def pull(args):
+    pass
+
+
+def update(args):
+    pass
+
+
 def get(args):
     client = init(args)
     if is_plural and args.name is None:
@@ -77,7 +97,15 @@ def get(args):
     etch_entity(client.get(args.entity, args.name, args.clean), args)
 
 
-commands = {"get": get, "config": config}
+commands = {
+    "config": config,
+    "create": create,
+    "delete": delete,
+    "get": get,
+    "push": push,
+    "pull": pull,
+    "update": update,
+}
 
 
 def execute(args):

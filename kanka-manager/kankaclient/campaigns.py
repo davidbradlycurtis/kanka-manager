@@ -7,9 +7,32 @@ from __future__ import absolute_import
 
 import logging
 import json
+from dataclasses import dataclass
 
 from kankaclient.constants import BASE_URL, GET, PATCH, POST, DELETE, PUT
-from kankaclient.base import BaseManager
+from kankaclient.base import BaseManager, Entity
+
+
+# @dataclass
+# class Campaign(Entity):
+
+#     entry: Optional[Any]
+#     image: Optional[Any]
+#     image_full: Optional[Any]
+#     image_thumb: Optional[Any]
+#     has_custom_image: bool
+#     is_template: bool
+#     entity_id: int
+#     location_id: Optional[Any]
+#     title: Optional[Any]
+#     age: Optional[Any]
+#     sex: Optional[Any]
+#     pronouns: Optional[Any]
+#     races: list
+#     families: list
+#     is_dead: bool
+#     traits: list
+
 
 class CampaignAPI(BaseManager):
     """Kanka Campaign API"""

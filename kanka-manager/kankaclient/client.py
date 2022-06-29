@@ -27,40 +27,39 @@ from kankaclient.tags import TagAPI
 from kankaclient.timelines import TimelineAPI
 
 
-
 class KankaClient(BaseManager):
     """Kanka Client"""
 
     entities: dict
 
-    def __init__(self, token: str, campaign: str, verbose: str=False):
-        super().__init__(token=token, verbose=verbose)
+    def __init__(self, config, verbose: str=False):
+        super().__init__(token=config.get('token'), verbose=verbose)
         self.logger = logging.getLogger(self.__class__.__name__)
+        self.campaign_dir = config.get('campaign_dir')
 
-        self.campaigns = CampaignAPI(token=token, campaign=campaign, verbose=verbose)
-        self.abilities = AbilityAPI(token=token, campaign=self.campaigns.campaign, verbose=verbose)
-        self.calendars = CalendarAPI(token=token, campaign=self.campaigns.campaign, verbose=verbose)
-        self.characters = CharacterAPI(token=token, campaign=self.campaigns.campaign, verbose=verbose)
-        self.conversations = ConversationAPI(token=token, campaign=self.campaigns.campaign, verbose=verbose)
-        self.dice = DiceRollAPI(token=token, campaign=self.campaigns.campaign, verbose=verbose)
-        self.events = EventAPI(token=token, campaign=self.campaigns.campaign, verbose=verbose)
-        self.families = FamilyAPI(token=token, campaign=self.campaigns.campaign, verbose=verbose)
-        self.items = ItemAPI(token=token, campaign=self.campaigns.campaign, verbose=verbose)
-        self.journals = JournalAPI(token=token, campaign=self.campaigns.campaign, verbose=verbose)
-        self.locations = LocationAPI(token=token, campaign=self.campaigns.campaign, verbose=verbose)
-        self.maps = MapAPI(token=token, campaign=self.campaigns.campaign, verbose=verbose)
-        self.organizations = OrganizationAPI(token=token, campaign=self.campaigns.campaign, verbose=verbose)
-        self.quests = QuestAPI(token=token, campaign=self.campaigns.campaign, verbose=verbose)
-        self.races = RaceAPI(token=token, campaign=self.campaigns.campaign, verbose=verbose)
-        self.tags = TagAPI(token=token, campaign=self.campaigns.campaign, verbose=verbose)
-        self.timelines = TimelineAPI(token=token, campaign=self.campaigns.campaign, verbose=verbose)
+        self.campaigns = CampaignAPI(token=config.get('token'), campaign=config.get('campaign'), verbose=verbose)
+        self.abilities = AbilityAPI(token=config.get('token'), campaign=self.campaigns.campaign, verbose=verbose)
+        self.calendars = CalendarAPI(token=config.get('token'), campaign=self.campaigns.campaign, verbose=verbose)
+        self.characters = CharacterAPI(token=config.get('token'), campaign=self.campaigns.campaign, verbose=verbose)
+        self.conversations = ConversationAPI(token=config.get('token'), campaign=self.campaigns.campaign, verbose=verbose)
+        self.dice = DiceRollAPI(token=config.get('token'), campaign=self.campaigns.campaign, verbose=verbose)
+        self.events = EventAPI(token=config.get('token'), campaign=self.campaigns.campaign, verbose=verbose)
+        self.families = FamilyAPI(token=config.get('token'), campaign=self.campaigns.campaign, verbose=verbose)
+        self.items = ItemAPI(token=config.get('token'), campaign=self.campaigns.campaign, verbose=verbose)
+        self.journals = JournalAPI(token=config.get('token'), campaign=self.campaigns.campaign, verbose=verbose)
+        self.locations = LocationAPI(token=config.get('token'), campaign=self.campaigns.campaign, verbose=verbose)
+        self.maps = MapAPI(token=config.get('token'), campaign=self.campaigns.campaign, verbose=verbose)
+        self.organizations = OrganizationAPI(token=config.get('token'), campaign=self.campaigns.campaign, verbose=verbose)
+        self.quests = QuestAPI(token=config.get('token'), campaign=self.campaigns.campaign, verbose=verbose)
+        self.races = RaceAPI(token=config.get('token'), campaign=self.campaigns.campaign, verbose=verbose)
+        self.tags = TagAPI(token=config.get('token'), campaign=self.campaigns.campaign, verbose=verbose)
+        self.timelines = TimelineAPI(token=config.get('token'), campaign=self.campaigns.campaign, verbose=verbose)
 
-        global entities
-        entities = {
+        self.entities = {
             'campaign': self.campaigns,
             'abilities': self.abilities,
             'calendars': self.calendars,
-            'character': self.characters,
+            'characters': self.characters,
             'conversations': self.conversations,
             'dice': self.dice,
             'events': self.events,
@@ -82,15 +81,17 @@ class KankaClient(BaseManager):
         self.logger.debug('Kanka Client initialized')
 
     
-    def get(self, entity: str, **kwargs: str) -> dict:
+    def get(self, entity: str, name_or_id: str or int, clean: bool) -> dict:
         """
         TODO
 
         Args:
-            entity (str): _description_
+            entity (str): the entity to retrieve
+            name_or_id (str or int): the name or id of the character
+            clean (bool): whether to remove empty/blank values
 
         Returns:
             dict: _description_
         """
-        result = entities.get(entity).get(**kwargs)
+        result = self.entities.get(entity).get(name_or_id, clean)
         return result

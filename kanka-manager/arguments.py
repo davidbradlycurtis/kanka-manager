@@ -14,6 +14,8 @@ def get_parser():
 
     parser_get = subparsers.add_parser('get', help='TODO')
     parser_get.add_argument('entity', action='store', type=str, help='TODO')
+    parser_get.add_argument('name', action='store', type=str, help='TODO')
+    parser_get.add_argument('-c', '--clean', action='store_true', default=False, help='TODO')
     parser_get.add_argument('-o', '--output', action='store', type=str, choices=OUTPUT_OPTIONS, help='TODO')
 
     parser_create = subparsers.add_parser('create', help='TODO')
@@ -28,5 +30,8 @@ def get_parser():
     parser_pull = subparsers.add_parser('pull', help='TODO')
 
     parser_push = subparsers.add_parser('push', help='TODO')
+
+    parser_config = subparsers.add_parser('config', help='TODO')
+    parser_config.add_argument('--file', help='TODO')
 
     return parser.parse_args()

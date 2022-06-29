@@ -9,8 +9,7 @@ COMMANDS = [
 
 OUTPUT_OPTIONS = [
     'yaml',
-    'json'
-    'raw'
+    'json',
 ]
 
 ENTITIES = [

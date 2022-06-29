@@ -55,7 +55,7 @@ load-plugins=pylint.extensions.check_docs
 #     While this should be a good warning, it's throwing errors where each file has its
 #     own main and thus has similar exception handling code. Sadly, there doesn't seem to
 #     be a way to disable this particular warning inline.
-disable=W0403,R0911,R0912,R0915,R0902,R0201,I0011,R0903,I0013,R0801
+disable=W0403,R0911,R0912,R0915,R0902,R0201,I0011,R0903,I0013,R0801,E0401,C0115,W0601,W0622
 
 
 [REPORTS]

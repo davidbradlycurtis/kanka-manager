@@ -1,24 +1,99 @@
+import os
+import logging
+import sys
+import yaml
+
 from arguments import get_parser
+from utilities import is_plural, etch, etch_all
+from kankaclient.constants import CONFIG_FIELDS, CONFIG
 from kankaclient.client import KankaClient
 
-def get(args, kankaclient):
-    print(kankaclient.get(args.entity))
+logging.basicConfig(format="%(asctime)s %(levelname)s: %(message)s")
+LOGGER = logging.getLogger("KankaManager")
 
-commands = {
-    'get': get
-}
+
+def config(args):
+    config_path = os.getcwd()
+    if args.file:
+        config_path = os.path.normpath(args.file)
+
+    if not os.path.isfile(config_path):
+        LOGGER.debug("Configuration file not found, creating a new file")
+        open(config_path, "w")
+
+    LOGGER.debug("Attempting to write to configuration file: %s", config_path)
+    try:
+        with open(config_path, "r") as config_file:
+            config = yaml.safe_load_all(config_file)
+            print("KankaManager Configuration")
+            print()
+            for field in CONFIG_FIELDS:
+                print("Setting %s:", field)
+                print(CONFIG_FIELDS.get(field))
+                _input = input("->")
+    except Exception:
+        pass
+
+
+def read_config(path: str) -> dict:
+    config = dict()
+    if path:
+        try:
+            with open(path, "r") as config_file:
+                data = yaml.safe_load(config_file)
+                config["campaign"] = data.get("campaign", None)
+                config["campaign_dir"] = data.get("campaign_dir", None)
+                config["token"] = data.get("token", None)
+                config["throttle"] = data.get("throttle", True)
+        except FileNotFoundError:
+            LOGGER.error("File not found: %s", path)
+            sys.exit(1)
+        except yaml.YAMLError as ex:
+            LOGGER.error("Unable to parse config file: %s", path)
+            LOGGER.error("Problem: %s", ex.problem)
+            LOGGER.error(ex.problem_mark)
+            sys.exit(1)
+
+    if None in config.values():
+        LOGGER.error("Missing required config value. (campaign/campaign_dir/token)")
+        sys.exit(1)
+
+    return config
+
+
+def init(args):
+    config_path = os.path.join(os.getcwd(), "kanka-manager", "kanka.yaml")
+    if args.config:
+        config_path = args.config
+
+    return KankaClient(read_config(config_path))
+
+
+def get(args):
+    client = init(args)
+    if is_plural and args.name is None:
+        etch_all(client.get_all(args.entity, args.clean), args)
+    entity = client.get(args.entity, args.name, args.clean)
+    etch_entity(client.get(args.entity, args.name, args.clean), args)
+
+
+commands = {"get": get, "config": config}
+
+
+def execute(args):
+    if args.command == CONFIG:
+        config(args)
+    else:
+        commands.get(args.command)(args)
+
 
 def main():
-    # Parse Args
     args = get_parser()
-    # Get config
-    # Init client
-    client = KankaClient(
-        token='Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiNjUxYzNkNDk1ZjVjZTUzMWQxMjc3MTk5Y2NlMzE1N2U4ZTFkMzZlOWRiYWZiOTY1ZGEyYmI5MTVkZjhkZDFkNTNkZGZlNDhmZTFmZWMzYjMiLCJpYXQiOjE2NDY0NTU3MDguMDA2Mjc4LCJuYmYiOjE2NDY0NTU3MDguMDA2MjgzLCJleHAiOjE2Nzc5OTE3MDcuOTk1NDY5LCJzdWIiOiIzMzM2MiIsInNjb3BlcyI6W119.BsK_qRFoPIlDnNG7DemtD_cVfN98LS-i3f9QUhfm_J7mS7_ltzuJ3typrPL_4lyqbnkrjjx0r5oICRqvgs902AmIDzt-bCGxsyesMWGQcQXFfoahGyJlYfRe4QSNsjlj3cLsM22dn0limMtnKB0I-7XcrbmNU15UJAN0MYJDOZ2pfCmjpn-5GnhgJQNwZrCZc33afUZSVvN_FAYT54GMPExMY0z1J1Zo49uUfs6FQhSG_SNrQ8zbPArCaGgH9hwMIEEhk0dn8-Kv-7SjJu1y4utWs3i9F08-WmIZ9YjDerJsrySc_N6TCgFn2GIeEnb_c-S3RpG4K3PMCTSrOGIKvy_S5zLYZOn6lNXaJ2RTaOhpZvHQHX_OeccoRJ5H9_K5ma1DXBPWaXgujCdaAi5S860ZRqsa8OUSQvHEsq03TNaOKupImBSKLGN6r3Qc57iBTfk6VrOIAO3cFG5Qej7t0gKQdpkDDPAK8dnLvC9QxrfKQCJcfwOrXz7dmUNb-XAKydU2brpqRzJyP3EScShrwPpYgXvE1BJNxtejpPhpE8GCM5TS6-qmHymHILYG0SsoM5HMrA70vFGu3DAJVkRzRavGEBsh_0mFzKR64zNT4hFFEzLyLha5c0FnkgKIFjUfZyrmskRW0t0DifJF5ZGX95PRezeNQHpRZ4yM5G3YseQ',
-        campaign='Journey to Morrivir'
-    )
-    # Execute command
-    commands.get(args.command)(args, client)
+    if args.verbose:
+        LOGGER.setLevel(logging.DEBUG)
 
-if __name__ == '__main__':
+    execute(args)
+
+
+if __name__ == "__main__":
     main()

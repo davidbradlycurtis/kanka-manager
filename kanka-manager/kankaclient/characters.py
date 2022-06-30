@@ -126,7 +126,7 @@ class CharacterAPI(BaseManager):
         return character
 
 
-    def get_character_by_id(self, id: int) -> dict:
+    def get_character_by_id(self, id: int) -> Character:
         """
         Retrieves the requested character from Kanka
 

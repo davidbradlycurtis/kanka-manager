@@ -8,30 +8,34 @@ from __future__ import absolute_import
 import logging
 import json
 from dataclasses import dataclass
+from typing import Any, Optional
+
+from dacite import from_dict
 
 from kankaclient.constants import BASE_URL, GET, PATCH, POST, DELETE, PUT
 from kankaclient.base import BaseManager, Entity
 
 
-# @dataclass
-# class Campaign(Entity):
+@dataclass
+class Campaign:
 
-#     entry: Optional[Any]
-#     image: Optional[Any]
-#     image_full: Optional[Any]
-#     image_thumb: Optional[Any]
-#     has_custom_image: bool
-#     is_template: bool
-#     entity_id: int
-#     location_id: Optional[Any]
-#     title: Optional[Any]
-#     age: Optional[Any]
-#     sex: Optional[Any]
-#     pronouns: Optional[Any]
-#     races: list
-#     families: list
-#     is_dead: bool
-#     traits: list
+    id: int
+    name: str
+    locale: Optional[Any]
+    entry_parsed: str
+    image: Optional[Any]
+    image_full: Optional[Any]
+    visibility: str
+    visibility_id: int
+    created_at: Any
+    updated_at: Optional[Any]
+    settings: Optional[Any]
+    ui_settings: Optional[Any]
+    default_images: Optional[Any]
+    follower: int
+    boosted: bool
+    superboosted: bool
+    members: Optional[Any]
 
 
 class CampaignAPI(BaseManager):
@@ -47,7 +51,7 @@ class CampaignAPI(BaseManager):
         self.campaigns = None
 
         self.campaign = self.get(campaign)
-        campaign_id = self.campaign.get('id')
+        campaign_id = self.campaign.id
 
         global GET_SINGLE
         global GET_MEMBERS
@@ -75,16 +79,19 @@ class CampaignAPI(BaseManager):
         response = self._request(url=self.GET_ALL, request=GET)
 
         if not response.ok:
-            self.logger.error('Failed to retrieve campaigns %s', self.campaign.get('name'))
+            self.logger.error('Failed to retrieve campaigns')
             raise self.KankaException(response.text, response.status_code, message=response.reason)
 
-        campaigns = json.loads(response.text).get('data')
         self.logger.debug(response.json())
+        if response.get("data"):
+            campaigns = [
+                from_dict(data_class=Campaign, data=campaign) for campaign in json.loads(response.text).get("data")
+            ]
 
         return campaigns
 
 
-    def get(self, name_or_id: str or int) -> dict:
+    def get(self, name_or_id: str or int) -> Campaign:
         """
         Retrives the desired campaign by name
 
@@ -103,14 +110,44 @@ class CampaignAPI(BaseManager):
         else:
             campaigns = self.get_all()
             for _campaign in campaigns:
-                if _campaign.get('name') == name_or_id:
+                if _campaign.name == name_or_id:
                     campaign = _campaign
                     break
 
         if campaign is None:
             raise self.KankaException(reason=f'Campaign not found: {name_or_id}', code=404, message='Not Found')
 
-        return campaign
+        return from_dict(data_class=Campaign, data=campaign)
+
+
+    def get_campaign_by_id(self, id: int) -> Campaign:
+        """
+        Retrieves the requested campaign from Kanka
+
+        Args:
+            id (int): the campaign id
+
+        Raises:
+            KankaException: Kanka Api Interface Exception
+
+        Returns:
+            campaign: the requested campaign
+        """
+        response = self._request(url=GET_SINGLE % id, request=GET)
+
+        if not response.ok:
+            self.logger.error(
+                "Failed to retrieve campaign %s",
+                id,
+            )
+            raise self.KankaException(
+                response.text, response.status_code, message=response.reason
+            )
+
+        campaign = json.loads(response.text).get("data")
+        self.logger.debug(response.json())
+
+        return from_dict(data_class=Campaign, data=campaign)
 
 
     def get_members(self) -> list:

@@ -48,7 +48,8 @@ class CampaignAPI(BaseManager):
     def __init__(self, token, campaign, verbose=False):
         super().__init__(token=token, verbose=verbose)
         self.logger = logging.getLogger(self.__class__.__name__)
-        self.campaigns = None
+        self.campaigns = list()
+        self.members = list()
 
         self.campaign = self.get(campaign)
         campaign_id = self.campaign.id
@@ -75,7 +76,6 @@ class CampaignAPI(BaseManager):
         if self.campaigns:
             return self.campaigns
 
-        campaigns = list()
         response = self._request(url=self.GET_ALL, request=GET)
 
         if not response.ok:
@@ -83,12 +83,12 @@ class CampaignAPI(BaseManager):
             raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         self.logger.debug(response.json())
-        if response.get("data"):
-            campaigns = [
+        if response.text:
+            self.campaigns = [
                 from_dict(data_class=Campaign, data=campaign) for campaign in json.loads(response.text).get("data")
             ]
 
-        return campaigns
+        return self.campaigns
 
 
     def get(self, name_or_id: str or int) -> Campaign:
@@ -117,7 +117,7 @@ class CampaignAPI(BaseManager):
         if campaign is None:
             raise self.KankaException(reason=f'Campaign not found: {name_or_id}', code=404, message='Not Found')
 
-        return from_dict(data_class=Campaign, data=campaign)
+        return campaign
 
 
     def get_campaign_by_id(self, id: int) -> Campaign:
@@ -160,14 +160,16 @@ class CampaignAPI(BaseManager):
         Returns:
             members (list): a list of available members
         """
-        members = list()
+        if self.members:
+            return self.members
+
         response = self._request(url=self.GET_MEMBERS, request=GET)
 
         if not response.ok:
             self.logger.error('Failed to retrieve members from campaign: ', self.campaign.get('name'))
             raise self.KankaException(response.text, response.status_code, message=response.reason)
 
-        members = json.loads(response.text).get('data')
+        self.members = json.loads(response.text).get('data')
         self.logger.debug(response)
 
-        return members
+        return self.members

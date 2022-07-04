@@ -47,13 +47,12 @@ class CharacterAPI(BaseManager):
         super().__init__(token=token, verbose=verbose)
         self.logger = logging.getLogger(self.__class__.__name__)
         self.campaign = campaign
-        self.campaign_id = campaign.get("id")
         self.characters = list()
 
         global GET_ALL_CREATE_SINGLE
         global GET_UPDATE_DELETE_SINGLE
-        GET_ALL_CREATE_SINGLE = BASE_URL + f"/{self.campaign_id}/characters"
-        GET_UPDATE_DELETE_SINGLE = BASE_URL + f"/{self.campaign_id}/characters/%s"
+        GET_ALL_CREATE_SINGLE = BASE_URL + f"/{self.campaign.id}/characters"
+        GET_UPDATE_DELETE_SINGLE = BASE_URL + f"/{self.campaign.id}/characters/%s"
 
         if verbose:
             self.logger.setLevel(logging.DEBUG)
@@ -72,25 +71,24 @@ class CharacterAPI(BaseManager):
         if self.characters:
             return self.characters
 
-        characters = list()
         response = self._request(url=GET_ALL_CREATE_SINGLE, request=GET)
 
         if not response.ok:
             self.logger.error(
                 "Failed to retrieve characters from campaign %s",
-                self.campaign.get("name"),
+                self.campaign.name,
             )
             raise self.KankaException(
                 response.text, response.status_code, message=response.reason
             )
 
         self.logger.debug(response.json())
-        if response.get("data"):
-            characters = [
+        if response.text.get("data"):
+            self.characters = [
                 from_dict(data_class=Character, data=character) for character in json.loads(response.text).get("data")
             ]
 
-        return characters
+        return self.characters
 
 
     def get(self, name_or_id: str or int) -> dict:
@@ -145,7 +143,7 @@ class CharacterAPI(BaseManager):
             self.logger.error(
                 "Failed to retrieve character %s from campaign %s",
                 id,
-                self.campaign.get("name"),
+                self.campaign.name,
             )
             raise self.KankaException(
                 response.text, response.status_code, message=response.reason
@@ -162,7 +160,7 @@ class CharacterAPI(BaseManager):
         Creates the provided character in Kanka
 
         Args:
-            character (Character or dict): the character to create
+            character (dict): the character to create
 
         Raises:
             KankaException: Kanka Api Interface Exception
@@ -178,7 +176,7 @@ class CharacterAPI(BaseManager):
             self.logger.error(
                 "Failed to create character %s in campaign %s",
                 character.get("name", "None"),
-                self.campaign.get("name"),
+                self.campaign.name,
             )
             raise self.KankaException(
                 response.text, response.status_code, message=response.reason
@@ -216,7 +214,7 @@ class CharacterAPI(BaseManager):
             self.logger.error(
                 "Failed to update character %s in campaign %s",
                 character.get("name", "None"),
-                self.campaign.get("name"),
+                self.campaign.name,
             )
             raise self.KankaException(
                 response.text, response.status_code, message=response.reason
@@ -247,7 +245,7 @@ class CharacterAPI(BaseManager):
             self.logger.error(
                 "Failed to delete character %s in campaign %s",
                 id,
-                self.campaign.get("name"),
+                self.campaign.name,
             )
             raise self.KankaException(
                 response.text, response.status_code, message=response.reason

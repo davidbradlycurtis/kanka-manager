@@ -91,8 +91,8 @@ def update(args):
 
 def get(args):
     client = init(args)
-    if is_plural and args.name is None:
-        etch_all(client.get_all(args.entity, args.clean), args)
+    if is_plural(args.entity) and args.name is None:
+        etch_all(client.get_all(args.entity), args)
     entity = client.get(args.entity, args.name, args.clean)
     etch_entity(client.get(args.entity, args.name, args.clean), args)
 

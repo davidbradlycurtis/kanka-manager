@@ -21,7 +21,7 @@ class RaceAPI(BaseManager):
         super().__init__(token=token, verbose=verbose)
         self.logger = logging.getLogger(self.__class__.__name__)
         self.campaign = campaign
-        self.campaign_id = campaign.get('id')
+        self.campaign_id = campaign.id
         self.races = list()
 
         global GET_ALL_CREATE_SINGLE

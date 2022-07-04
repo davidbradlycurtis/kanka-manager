@@ -80,7 +80,7 @@ class KankaClient(BaseManager):
 
         self.logger.debug('Kanka Client initialized')
 
-    
+
     def get(self, entity: str, name_or_id: str or int, clean: bool) -> dict:
         """
         TODO
@@ -94,4 +94,18 @@ class KankaClient(BaseManager):
             dict: _description_
         """
         result = self.entities.get(entity).get(name_or_id, clean)
+        return result
+
+
+    def get_all(self, entity: str) -> dict:
+        """
+        TODO
+
+        Args:
+            entity (str): the entity to retrieve
+
+        Returns:
+            dict: _description_
+        """
+        result = self.entities.get(entity).get_all()
         return result

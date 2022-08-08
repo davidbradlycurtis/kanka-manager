@@ -8,7 +8,7 @@ from __future__ import absolute_import
 import logging
 
 from kankaclient.abilities import AbilityAPI
-from kankaclient.base import BaseManager
+from kankaclient.base import BaseManager, Entity
 from kankaclient.calendars import CalendarAPI
 from kankaclient.campaigns import CampaignAPI
 from kankaclient.characters import CharacterAPI
@@ -81,19 +81,18 @@ class KankaClient(BaseManager):
         self.logger.debug('Kanka Client initialized')
 
 
-    def get(self, entity: str, name_or_id: str or int, clean: bool) -> dict:
+    def get(self, entity: str, name_or_id: str or int) -> dict:
         """
         TODO
 
         Args:
             entity (str): the entity to retrieve
             name_or_id (str or int): the name or id of the character
-            clean (bool): whether to remove empty/blank values
 
         Returns:
             dict: _description_
         """
-        result = self.entities.get(entity).get(name_or_id, clean)
+        result = self.entities.get(entity).get(name_or_id)
         return result
 
 
@@ -108,4 +107,49 @@ class KankaClient(BaseManager):
             dict: _description_
         """
         result = self.entities.get(entity).get_all()
+        return result
+
+
+    def create(self, entity: str, data: dict) -> dict:
+        """
+        TODO
+
+        Args:
+            entity (str): the entity to create
+            data (dict): the entity's data
+
+        Returns:
+            dict: _description_
+        """
+        result = self.entities.get(entity).create(data)
+        return result
+
+
+    def update(self, entity: str, data: dict or Entity) -> dict:
+        """
+        TODO
+
+        Args:
+            entity (str): the entity to update
+            data (dict or Entity): the entity's data
+
+        Returns:
+            dict: _description_
+        """
+        result = self.entities.get(entity).update(data)
+        return result
+
+
+    def delete(self, entity: str, name_or_id: str or int) -> dict:
+        """
+        TODO
+
+        Args:
+            entity (str): the entity to update
+            name_or_id (str or int): the name or id of the entity to delete
+
+        Returns:
+            dict: _description_
+        """
+        result = self.entities.get(entity).delete(name_or_id)
         return result

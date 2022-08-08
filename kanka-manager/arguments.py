@@ -1,5 +1,5 @@
 import argparse
-from config import OUTPUT_OPTIONS
+from kankaclient.constants import OUTPUT_OPTIONS, ENTITY_FORMAT
 
 
 def get_parser():
@@ -8,14 +8,14 @@ def get_parser():
     )
 
     parser.add_argument('-v', '--verbose', action='store_true', default=False, help='enable verbose logging')
-    parser.add_argument('--config', action='store', default=None, help='path to Kanka config')
+    parser.add_argument('-c', '--config', action='store', default=None, help='path to Kanka config')
 
     subparsers = parser.add_subparsers(title='subcommands', description='valid subcommands', help='additional help', dest='command')
 
     parser_get = subparsers.add_parser('get', help='TODO')
     parser_get.add_argument('entity', action='store', type=str, help='TODO')
     parser_get.add_argument('-n', '--name', action='store', type=str, help='TODO')
-    parser_get.add_argument('-c', '--clean', action='store_true', default=False, help='TODO')
+    parser_get.add_argument('--clean', action='store_true', default=False, help='TODO')
     parser_get.add_argument('-o', '--output', action='store', type=str, choices=OUTPUT_OPTIONS, help='TODO')
 
     parser_create = subparsers.add_parser('create', help='TODO')
@@ -33,5 +33,11 @@ def get_parser():
 
     parser_config = subparsers.add_parser('config', help='TODO')
     parser_config.add_argument('--file', help='TODO')
+    parser_config.add_argument('--show', action='store_true', default=None, help='TODO')
 
-    return parser.parse_args()
+    args = parser.parse_args()
+
+    if hasattr(args, 'entity'):
+        setattr(args, 'entity', ENTITY_FORMAT.get(args.entity, 'None'))
+
+    return args

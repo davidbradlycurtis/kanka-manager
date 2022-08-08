@@ -4,35 +4,29 @@ import sys
 import yaml
 
 from arguments import get_parser
-from utilities import is_plural, etch, etch_all
-from kankaclient.constants import CONFIG_FIELDS, CONFIG
+from utilities import clogger, create_config, show_config
+from kankaclient.constants import CONFIG_FIELDS, CONFIG, DEFAULT_CONFIG
 from kankaclient.client import KankaClient
 
 logging.basicConfig(format="%(asctime)s %(levelname)s: %(message)s")
+LOGGER = clogger.get_logger()
 LOGGER = logging.getLogger("KankaManager")
 
 
 def config(args):
-    config_path = os.getcwd()
+    config_path = os.path.join(os.getcwd(), 'kanka.conf')
     if args.file:
         config_path = os.path.normpath(args.file)
 
     if not os.path.isfile(config_path):
         LOGGER.debug("Configuration file not found, creating a new file")
-        open(config_path, "w")
+        with open(config_path, "w") as config_file:
+            config_file.write(DEFAULT_CONFIG)
 
-    LOGGER.debug("Attempting to write to configuration file: %s", config_path)
-    try:
-        with open(config_path, "r") as config_file:
-            config = yaml.safe_load_all(config_file)
-            print("KankaManager Configuration")
-            print()
-            for field in CONFIG_FIELDS:
-                print("Setting %s:", field)
-                print(CONFIG_FIELDS.get(field))
-                _input = input("->")
-    except Exception:
-        pass
+    if args.show:
+        show_config(config_path)
+    else:
+        create_config(config_path)
 
 
 def read_config(path: str) -> dict:
@@ -62,7 +56,7 @@ def read_config(path: str) -> dict:
 
 
 def init(args):
-    config_path = os.path.join(os.getcwd(), "kanka-manager", "kanka.yaml")
+    config_path = os.path.join(os.getcwd(), "kanka.conf")
     if args.config:
         config_path = args.config
 
@@ -91,10 +85,12 @@ def update(args):
 
 def get(args):
     client = init(args)
-    if is_plural(args.entity) and args.name is None:
-        etch_all(client.get_all(args.entity), args)
-    entity = client.get(args.entity, args.name, args.clean)
-    etch_entity(client.get(args.entity, args.name, args.clean), args)
+    if args.name is None:
+        result = client.get_all(args.entity)
+    result = client.get(args.entity, args.name)
+
+    #TODO: Finish output format/process
+    print(result)
 
 
 commands = {

@@ -12,7 +12,7 @@ from typing import Any, Optional
 
 from dacite import from_dict
 
-from kankaclient.constants import BASE_URL, GET, POST, DELETE, PUT, DEFAULT_REMOVE
+from kankaclient.constants import BASE_URL, GET, POST, DELETE, PUT
 from kankaclient.base import BaseManager, Entity
 
 
@@ -83,7 +83,7 @@ class CharacterAPI(BaseManager):
             )
 
         self.logger.debug(response.json())
-        if response.text.get("data"):
+        if response.text:
             self.characters = [
                 from_dict(data_class=Character, data=character) for character in json.loads(response.text).get("data")
             ]

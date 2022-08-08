@@ -82,7 +82,7 @@ class BaseManager(object):
         if verbose:
             self.logger.setLevel(logging.DEBUG)
 
-        self.headers = {'Authorization': token, 'Content-type': 'application/json'}
+        self.headers = {'Authorization': f'Bearer {token}', 'Content-type': 'application/json'}
         self.throttle = throttle
 
 

@@ -7,9 +7,29 @@ from __future__ import absolute_import
 
 import logging
 import json
+from dataclasses import dataclass
+from typing import Any, Optional
+
+from dacite import from_dict
 
 from kankaclient.constants import BASE_URL, GET, POST, DELETE, PUT
-from kankaclient.base import BaseManager
+from kankaclient.base import BaseManager, Entity
+
+
+@dataclass
+class Ability(Entity):
+
+    entry: Optional[Any]
+    image: Optional[Any]
+    image_full: Optional[Any]
+    image_thumb: Optional[Any]
+    has_custom_image: bool
+    tags: list
+    type: Optional[Any]
+    charges: Optional[Any]
+    entity_id: int
+    abilities: list
+
 
 class AbilityAPI(BaseManager):
     """Kanka Ability API"""
@@ -46,17 +66,24 @@ class AbilityAPI(BaseManager):
         if self.abilities:
             return self.abilities
 
-        abilities = list()
         response = self._request(url=GET_ALL_CREATE_SINGLE, request=GET)
 
         if not response.ok:
-            self.logger.error('Failed to retrieve abilities from campaign %s', self.campaign.get('name'))
-            raise self.KankaException(response.text, response.status_code, message=response.reason)
+            self.logger.error(
+                "Failed to retrieve abilities from campaign %s",
+                self.campaign.name,
+            )
+            raise self.KankaException(
+                response.text, response.status_code, message=response.reason
+            )
 
-        abilities = json.loads(response.text).get('data')
         self.logger.debug(response.json())
+        if response.text:
+            self.abilities = [
+                from_dict(data_class=Ability, data=character) for character in json.loads(response.text).get("data")
+            ]
 
-        return abilities
+        return self.abilities
 
 
     def get(self, name_or_id: str or int) -> dict:
@@ -73,17 +100,21 @@ class AbilityAPI(BaseManager):
             ability: the requested ability
         """
         ability = None
-        if type(name_or_id) is int:
+        if isinstance(name_or_id, int):
             ability = self.get_ability_by_id(name_or_id)
         else:
             abilities = self.get_all()
             for _ability in abilities:
-                if _ability.get('name') == name_or_id:
+                if _ability.name == name_or_id:
                     ability = _ability
                     break
 
         if ability is None:
-            raise self.KankaException(reason=f'Ability not found: {name_or_id}', code=404, message='Not Found')
+            raise self.raise_exception(
+                reason=f"Ability not found: {name_or_id}",
+                code=404,
+                message="Not Found",
+            )
 
         return ability
 

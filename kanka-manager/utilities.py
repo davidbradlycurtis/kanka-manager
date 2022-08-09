@@ -1,13 +1,11 @@
-import json
 import os
 import sys
 import yaml
 import logging
-from kankaclient.constants import LOG_FORMAT, LOG_DATE_FORMAT, CONFIG_FIELDS
+from kankaclient.constants import LOG_FORMAT, LOG_DATE_FORMAT, CONFIG_FIELDS, CONFIG_FILE
 
 LOGLEVEL = os.environ.get('LOGLEVEL', 'WARNING').upper()
 LOGGER = logging.getLogger("KankaManager")
-_format = {"yaml": yaml.safe_dump, "json": json.dump}
 
 class SpaceDumper(yaml.SafeDumper):
     # HACK: insert blank lines between top-level objects
@@ -37,6 +35,33 @@ __all__ = [
 ]
 
 
+def read_config(path: str) -> dict:
+    config = dict()
+    if path:
+        try:
+            with open(path, "r") as config_file:
+                data = yaml.safe_load(config_file)
+                config["campaign"] = data.get("campaign", None)
+                config["campaign_dir"] = data.get("campaign_dir", None)
+                config["token"] = data.get("token", None)
+                config["throttle"] = data.get("throttle", True)
+        except FileNotFoundError as ex:
+            LOGGER.error('Failed to read config, file not found: %s', path)
+            LOGGER.debug(ex)
+            sys.exit(1)
+        except yaml.YAMLError as ex:
+            LOGGER.error("Unable to parse config file: %s", path)
+            LOGGER.error("Problem: %s", ex.problem)
+            LOGGER.error(ex.problem_mark)
+            sys.exit(1)
+
+    if None in config.values():
+        LOGGER.error("Missing required config value. (campaign/campaign_dir/token)")
+        sys.exit(1)
+
+    return config
+
+
 def write_data(file, data):
     success = False
     if os.path.isfile(file):
@@ -53,16 +78,14 @@ def write_data(file, data):
 def show_config(path):
     try:
         with open(path, "r") as config_file:
-            config = yaml.safe_load(config_file)
-            print('---Config---')
-            print(f'Path: {path}')
-            for field in config:
-                print(f'-{field}: {config.get(field)}')
+            print(config_file.read())
     except FileNotFoundError as ex:
-        # Log error
+        LOGGER.error('Failed to show config, file not found: %s', path)
+        LOGGER.debug(ex)
         sys.exit(1)
     except yaml.YAMLError as ex:
-        # Log error
+        LOGGER.error('Failed to process config: %s', path)
+        LOGGER.debug(ex)
         sys.exit(1)
     sys.exit(0)
 
@@ -70,21 +93,34 @@ def show_config(path):
 def create_config(path):
     LOGGER.debug("Attempting to write to configuration file: %s", path)
     try:
-        with open(path, "r+") as config_file:
+        with open(path, "r") as config_file:
             config = yaml.safe_load(config_file)
-            print("---KankaManager Configuration---")
+            if config is None:
+                config = dict()
+
+            print("\n---KankaManager Configuration---")
             for field in CONFIG_FIELDS:
                 _input = input(CONFIG_FIELDS.get(field))
-                config[field] = _input
-            config_file.seek(0)
-            config_file.truncate()
-            yaml.safe_dump_all(config_file)
+                if _input:
+                    config[field] = _input
+                else:
+                    if field not in config:
+                        config[field] = None
+
+        os.remove(path)
+        with open(path, "w") as config_file:
+            config_file.write(CONFIG_FILE.format(**config))
+
     except FileNotFoundError as ex:
-        # Log error
+        LOGGER.error('Failed to create config, file not found: %s', path)
+        LOGGER.debug(ex)
         sys.exit(1)
     except yaml.YAMLError as ex:
-        # Log error
+        LOGGER.error('Failed to process config file: %s', path)
+        LOGGER.debug(ex)
         sys.exit(1)
+
+    print(f'Configuration file written to: {path}')
     sys.exit(0)
 
 
@@ -98,23 +134,3 @@ def read_data(file):
             pass
             #LOG ERROR
     return data
-
-
-def is_plural(entity: str) -> bool:
-    return entity.endswith(entity)
-
-
-def etch(entities: list, args):
-    if entities is None:
-        # Log Error
-        sys.exit(1)
-
-    for entity in entities:
-        if args.output == "yaml":
-            output = _format.get(args.output)(entity)
-
-        print(output)
-
-
-def etch_all(entity_list, args):
-    pass

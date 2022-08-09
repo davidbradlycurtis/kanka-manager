@@ -66,13 +66,19 @@ CONFIG_FIELDS = {
     'throttle': 'Throttle? (true/false): '
 }
 
-DEFAULT_CONFIG = '''
-# Default KankaManager configuration file
+CONFIG_FILE = '''# ---KankaManager configuration file---
 
-campaign: None
-campaign_dir: None
-token: None
-throttle: True
+# The name of the Kanka campaign to manage
+campaign: {campaign}
+
+# The folder/directory where to store campaign entities
+campaign_dir: {campaign_dir}
+
+# The campaign API token (https://kanka.io/en/api-docs/1.0/setup)
+token: {token}
+
+# Whether to throttle API requests (recommended for none boosted campaigns)
+throttle: {throttle}
 '''
 
 DEFAULT_REMOVE = [

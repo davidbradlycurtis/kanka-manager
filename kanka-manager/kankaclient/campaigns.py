@@ -12,8 +12,8 @@ from typing import Any, Optional
 
 from dacite import from_dict
 
-from kankaclient.constants import BASE_URL, GET, PATCH, POST, DELETE, PUT
-from kankaclient.base import BaseManager, Entity
+from kankaclient.constants import BASE_URL, GET
+from kankaclient.base import BaseManager
 
 
 @dataclass

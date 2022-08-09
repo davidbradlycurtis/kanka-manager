@@ -7,9 +7,31 @@ from __future__ import absolute_import
 
 import logging
 import json
+from dataclasses import dataclass
+from typing import Any, Optional
+
+from dacite import from_dict
 
 from kankaclient.constants import BASE_URL, GET, POST, DELETE, PUT
-from kankaclient.base import BaseManager
+from kankaclient.base import BaseManager, Entity
+
+
+@dataclass
+class Location(Entity):
+
+    entry: Optional[Any]
+    image: Optional[Any]
+    image_full: Optional[Any]
+    image_thumb: Optional[Any]
+    has_custom_image: bool
+    is_template: bool
+    entity_id: int
+    location_id: Optional[Any]
+    tags: list
+    parent_location_id: Optional[int]
+    map: Optional[Any]
+    is_map_private: Optional[int]
+
 
 class LocationAPI(BaseManager):
     """Kanka Location API"""
@@ -46,17 +68,24 @@ class LocationAPI(BaseManager):
         if self.locations:
             return self.locations
 
-        locations = list()
         response = self._request(url=GET_ALL_CREATE_SINGLE, request=GET)
 
         if not response.ok:
-            self.logger.error('Failed to retrieve locations from campaign %s', self.campaign.get('name'))
-            raise self.KankaException(response.text, response.status_code, message=response.reason)
+            self.logger.error(
+                "Failed to retrieve locations from campaign %s",
+                self.campaign.name,
+            )
+            raise self.KankaException(
+                response.text, response.status_code, message=response.reason
+            )
 
-        locations = json.loads(response.text).get('data')
         self.logger.debug(response.json())
+        if response.text:
+            self.locations = [
+                from_dict(data_class=Location, data=location) for location in json.loads(response.text).get("data")
+            ]
 
-        return locations
+        return self.locations
 
 
     def get(self, name_or_id: str or int) -> dict:
@@ -73,22 +102,27 @@ class LocationAPI(BaseManager):
             location: the requested location
         """
         location = None
-        if type(name_or_id) is int:
+        if isinstance(name_or_id, int):
             location = self.get_location_by_id(name_or_id)
         else:
-            locations = self.get()
+            locations = self.get_all()
             for _location in locations:
-                if _location.get('name') == name_or_id:
+                if _location.name == name_or_id:
                     location = _location
                     break
 
         if location is None:
-            raise self.KankaException(reason=f'Location not found: {name_or_id}', code=404, message='Not Found')
+            raise self.raise_exception(
+                reason=f"Location not found: {name_or_id}",
+                code=404,
+                message="Not Found",
+            )
 
         return location
 
 
-    def get_location_by_id(self, id: int) -> dict:
+
+    def get_location_by_id(self, id: int) -> Location:
         """
         Retrieves the requested location from Kanka
 
@@ -104,13 +138,19 @@ class LocationAPI(BaseManager):
         response = self._request(url=GET_UPDATE_DELETE_SINGLE % id, request=GET)
 
         if not response.ok:
-            self.logger.error('Failed to retrieve location %s from campaign %s', id, self.campaign.get('name'))
-            raise self.KankaException(response.text, response.status_code, message=response.reason)
+            self.logger.error(
+                "Failed to retrieve location %s from campaign %s",
+                id,
+                self.campaign.name,
+            )
+            raise self.KankaException(
+                response.text, response.status_code, message=response.reason
+            )
 
-        location = json.loads(response.text).get('data')
+        location = json.loads(response.text).get("data")
         self.logger.debug(response.json())
 
-        return location
+        return from_dict(data_class=Location, data=location)
 
 
     def create(self, location: dict) -> dict:

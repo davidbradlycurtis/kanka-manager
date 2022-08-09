@@ -25,7 +25,6 @@ class Ability(Entity):
     image_thumb: Optional[Any]
     has_custom_image: bool
     tags: list
-    type: Optional[Any]
     charges: Optional[Any]
     entity_id: int
     abilities: list
@@ -80,7 +79,7 @@ class AbilityAPI(BaseManager):
         self.logger.debug(response.json())
         if response.text:
             self.abilities = [
-                from_dict(data_class=Ability, data=character) for character in json.loads(response.text).get("data")
+                from_dict(data_class=Ability, data=ability) for ability in json.loads(response.text).get("data")
             ]
 
         return self.abilities
@@ -119,7 +118,7 @@ class AbilityAPI(BaseManager):
         return ability
 
 
-    def get_ability_by_id(self, id: int) -> dict:
+    def get_ability_by_id(self, id: int) -> Ability:
         """
         Retrieves the requested ability from Kanka
 
@@ -135,13 +134,19 @@ class AbilityAPI(BaseManager):
         response = self._request(url=GET_UPDATE_DELETE_SINGLE % id, request=GET)
 
         if not response.ok:
-            self.logger.error('Failed to retrieve ability %s from campaign %s', id, self.campaign.get('name'))
-            raise self.KankaException(response.text, response.status_code, message=response.reason)
+            self.logger.error(
+                "Failed to retrieve ability %s from campaign %s",
+                id,
+                self.campaign.name,
+            )
+            raise self.KankaException(
+                response.text, response.status_code, message=response.reason
+            )
 
-        ability = json.loads(response.text).get('data')
+        ability = json.loads(response.text).get("data")
         self.logger.debug(response.json())
 
-        return ability
+        return from_dict(data_class=Ability, data=ability)
 
 
     def create(self, ability: dict) -> dict:

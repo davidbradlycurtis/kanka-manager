@@ -1,4 +1,7 @@
+# Program packages
 requests==2.27.1
 pylint==2.12.2
 pytest==6.2.5
 Pyyaml==6.o
+
+# Testing packages

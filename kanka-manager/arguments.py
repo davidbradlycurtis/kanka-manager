@@ -1,5 +1,14 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+#----------------------------------------------------------------------------
+""" Details about the module and for what purpose it was built for"""
+# ---------------------------------------------------------------------------
 import argparse
-from kankaclient.constants import OUTPUT_OPTIONS, ENTITY_FORMAT
+from kankaclient.constants import (
+    OUTPUT_OPTIONS,
+    ENTITY_FORMAT
+)
+# ---------------------------------------------------------------------------
 
 
 def get_parser():

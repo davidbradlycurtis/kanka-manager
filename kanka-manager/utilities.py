@@ -1,8 +1,19 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+#----------------------------------------------------------------------------
+""" Details about the module and for what purpose it was built for"""
+# ---------------------------------------------------------------------------
 import os
 import sys
 import yaml
 import logging
-from kankaclient.constants import LOG_FORMAT, LOG_DATE_FORMAT, CONFIG_FIELDS, CONFIG_FILE
+from kankaclient.constants import (
+    LOG_FORMAT,
+    LOG_DATE_FORMAT,
+    CONFIG_FIELDS,
+    CONFIG_FILE
+)
+# ---------------------------------------------------------------------------
 
 LOGLEVEL = os.environ.get('LOGLEVEL', 'WARNING').upper()
 LOGGER = logging.getLogger("KankaManager")

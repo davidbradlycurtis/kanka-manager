@@ -1,13 +1,26 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+#----------------------------------------------------------------------------
+# Author: David Curtis
+# Contact: davidbradlycurtis.com
+# version ='1.0'
+# ---------------------------------------------------------------------------
+""" Details about the module and for what purpose it was built for"""
+# ---------------------------------------------------------------------------
 import os
 import logging
-
 from arguments import get_parser
-from utilities import get_logger, create_config, show_config, read_config
+from utilities import (
+    get_logger,
+    create_config,
+    show_config,
+    read_config
+)
 from kankaclient.constants import CONFIG
 from kankaclient.client import KankaClient
+# ---------------------------------------------------------------------------
 
 LOGGER = get_logger()
-
 
 def config(args):
     config_path = os.path.join(os.getcwd(), 'kanka.conf')

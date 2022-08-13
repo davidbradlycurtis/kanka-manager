@@ -1,7 +1,9 @@
 # Program packages
 requests==2.27.1
+Pyyaml==6.0
+
+# Development/Testing packages
+coverage==6.4.3
 pylint==2.12.2
 pytest==6.2.5
-Pyyaml==6.o
-
-# Testing packages
+tox==3.25.1

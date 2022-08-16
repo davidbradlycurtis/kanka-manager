@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #----------------------------------------------------------------------------
-""" Details about the module and for what purpose it was built for"""
+""" Contains program utility functions"""
 # ---------------------------------------------------------------------------
 import os
 import sys

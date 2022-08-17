@@ -1,6 +1,7 @@
 # Program packages
 dacite==1.6.0
 requests==2.27.1
+prettytable==3.3.0
 Pyyaml==6.0
 
 # Development/Testing packages

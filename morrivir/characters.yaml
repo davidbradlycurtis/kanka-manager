@@ -2,8 +2,8 @@
   entry: <p><br /></p>
   entry_parsed: <p><br /></p>
   image: characters/wpFiIAqaTUfTOt6aVUHcXxluzfsxmwcPHu0Wzvmr.png
-  image_full: https://images.kanka.io/user/mDjSHSabuCbD6q757gtbvnwoqic=/smart/src/characters%2FwpFiIAqaTUfTOt6aVUHcXxluzfsxmwcPHu0Wzvmr.png?webpfallback
-  image_thumb: https://images.kanka.io/user/-RTkK71b7VRSKe5s-pT_WQ4nkQY=/40x40/smart/src/characters%2FwpFiIAqaTUfTOt6aVUHcXxluzfsxmwcPHu0Wzvmr.png?webpfallback
+  image_full: https://images.kankaclient.io/user/mDjSHSabuCbD6q757gtbvnwoqic=/smart/src/characters%2FwpFiIAqaTUfTOt6aVUHcXxluzfsxmwcPHu0Wzvmr.png?webpfallback
+  image_thumb: https://images.kankaclient.io/user/-RTkK71b7VRSKe5s-pT_WQ4nkQY=/40x40/smart/src/characters%2FwpFiIAqaTUfTOt6aVUHcXxluzfsxmwcPHu0Wzvmr.png?webpfallback
   is_private: false
   title: Cook/Fighter
   age: '13'
@@ -16,8 +16,8 @@
 ######################################################################################################################################
 - name: Umari Wavespeaker (oo-mar-ee)
   image: characters/1rT7suLam6lpFbiOMLKwKaOR5G9Y0FNwAZ8hvlLw.png
-  image_full: https://images.kanka.io/user/k4rQbjbhii5Rz549vilpRTSHG7Q=/smart/src/characters%2F1rT7suLam6lpFbiOMLKwKaOR5G9Y0FNwAZ8hvlLw.png?webpfallback
-  image_thumb: https://images.kanka.io/user/rFbZlbaUoZpcF7ZoT1DjRNZTdAI=/40x40/smart/src/characters%2F1rT7suLam6lpFbiOMLKwKaOR5G9Y0FNwAZ8hvlLw.png?webpfallback
+  image_full: https://images.kankaclient.io/user/k4rQbjbhii5Rz549vilpRTSHG7Q=/smart/src/characters%2F1rT7suLam6lpFbiOMLKwKaOR5G9Y0FNwAZ8hvlLw.png?webpfallback
+  image_thumb: https://images.kankaclient.io/user/rFbZlbaUoZpcF7ZoT1DjRNZTdAI=/40x40/smart/src/characters%2F1rT7suLam6lpFbiOMLKwKaOR5G9Y0FNwAZ8hvlLw.png?webpfallback
   is_private: false
   age: '23'
   pronouns: She/Her
@@ -30,8 +30,8 @@
 ######################################################################################################################################
 - name: Ibier
   image: characters/qvqSzWsPV88mToOyYzteGBl3Mw3gQw1t08c3SJHc.jpg
-  image_full: https://images.kanka.io/user/zIdX94tlZQGvmVpyCCB1PSDNeDo=/smart/src/characters%2FqvqSzWsPV88mToOyYzteGBl3Mw3gQw1t08c3SJHc.jpg?webpfallback
-  image_thumb: https://images.kanka.io/user/iWRzKilzKdTR2WYXaBqH81EOQKE=/40x40/smart/src/characters%2FqvqSzWsPV88mToOyYzteGBl3Mw3gQw1t08c3SJHc.jpg?webpfallback
+  image_full: https://images.kankaclient.io/user/zIdX94tlZQGvmVpyCCB1PSDNeDo=/smart/src/characters%2FqvqSzWsPV88mToOyYzteGBl3Mw3gQw1t08c3SJHc.jpg?webpfallback
+  image_thumb: https://images.kankaclient.io/user/iWRzKilzKdTR2WYXaBqH81EOQKE=/40x40/smart/src/characters%2FqvqSzWsPV88mToOyYzteGBl3Mw3gQw1t08c3SJHc.jpg?webpfallback
   is_private: false
   title: Brute
   type: Player Character
@@ -42,8 +42,8 @@
 ######################################################################################################################################
 - name: Arlin BeastFellow (Are-Lin)
   image: characters/x5J70XzsLx62ky2N7qHkHnwzTIfACdc7fZ4o5doO.png
-  image_full: https://images.kanka.io/user/DLjsz4yTbW6oiDqaK3LpuqOmtjQ=/smart/src/characters%2Fx5J70XzsLx62ky2N7qHkHnwzTIfACdc7fZ4o5doO.png?webpfallback
-  image_thumb: https://images.kanka.io/user/UvKLU8qgqyfVZrbB6j9BfNb235A=/40x40/smart/src/characters%2Fx5J70XzsLx62ky2N7qHkHnwzTIfACdc7fZ4o5doO.png?webpfallback
+  image_full: https://images.kankaclient.io/user/DLjsz4yTbW6oiDqaK3LpuqOmtjQ=/smart/src/characters%2Fx5J70XzsLx62ky2N7qHkHnwzTIfACdc7fZ4o5doO.png?webpfallback
+  image_thumb: https://images.kankaclient.io/user/UvKLU8qgqyfVZrbB6j9BfNb235A=/40x40/smart/src/characters%2Fx5J70XzsLx62ky2N7qHkHnwzTIfACdc7fZ4o5doO.png?webpfallback
   is_private: false
   title: Summoner Druid
   age: '35'
@@ -57,8 +57,8 @@
 ######################################################################################################################################
 - name: Vincent Von Hess
   image: characters/8UtRO3TnEezRAD0F1rR72h26TMABwNQVoj4WxymK.png
-  image_full: https://images.kanka.io/user/Qg1IM-J619ezkR4dXedrERETR7Q=/smart/src/characters%2F8UtRO3TnEezRAD0F1rR72h26TMABwNQVoj4WxymK.png?webpfallback
-  image_thumb: https://images.kanka.io/user/J-H5j8F1Dia_dKt2hbE9UyEzD4w=/40x40/smart/src/characters%2F8UtRO3TnEezRAD0F1rR72h26TMABwNQVoj4WxymK.png?webpfallback
+  image_full: https://images.kankaclient.io/user/Qg1IM-J619ezkR4dXedrERETR7Q=/smart/src/characters%2F8UtRO3TnEezRAD0F1rR72h26TMABwNQVoj4WxymK.png?webpfallback
+  image_thumb: https://images.kankaclient.io/user/J-H5j8F1Dia_dKt2hbE9UyEzD4w=/40x40/smart/src/characters%2F8UtRO3TnEezRAD0F1rR72h26TMABwNQVoj4WxymK.png?webpfallback
   is_private: false
   tags:
   - 191449
@@ -80,8 +80,8 @@
     style="font-size:12pt;font-family:'Times New Roman';color:rgb(0,0,0);background-color:transparent;">(Al-ex-and-er
     Doe-pee-oh)</span></span><br /></p>
   image: characters/6udVX52M1mSLEGOxwjnQvBuRyQY2GnIcWeWIiu9t.png
-  image_full: https://images.kanka.io/user/PgGs3xb7NBgSUcM2uTt380iC96E=/smart/src/characters%2F6udVX52M1mSLEGOxwjnQvBuRyQY2GnIcWeWIiu9t.png?webpfallback
-  image_thumb: https://images.kanka.io/user/WfJrQSdRtmVxwWHDh3NsnxL2Xjk=/40x40/smart/src/characters%2F6udVX52M1mSLEGOxwjnQvBuRyQY2GnIcWeWIiu9t.png?webpfallback
+  image_full: https://images.kankaclient.io/user/PgGs3xb7NBgSUcM2uTt380iC96E=/smart/src/characters%2F6udVX52M1mSLEGOxwjnQvBuRyQY2GnIcWeWIiu9t.png?webpfallback
+  image_thumb: https://images.kankaclient.io/user/WfJrQSdRtmVxwWHDh3NsnxL2Xjk=/40x40/smart/src/characters%2F6udVX52M1mSLEGOxwjnQvBuRyQY2GnIcWeWIiu9t.png?webpfallback
   is_private: false
   title: Warlock
   age: Late Teens
@@ -101,8 +101,8 @@
     via sign language or writing.</p><p><br /></p><p>Offered us shelter during the
     Ancient Water storm our first night in Remport.</p>
   image: characters/FTqyxYq91PoRb0k1H5wntDl4e6Ii9Ds55e9ntj5h.png
-  image_full: https://images.kanka.io/user/d_BIk26OLbgbo_snt9kt0kk4174=/smart/src/characters%2FFTqyxYq91PoRb0k1H5wntDl4e6Ii9Ds55e9ntj5h.png?webpfallback
-  image_thumb: https://images.kanka.io/user/sFLQv7TmaxBnxJubK3CYVn_5Tvc=/40x40/smart/src/characters%2FFTqyxYq91PoRb0k1H5wntDl4e6Ii9Ds55e9ntj5h.png?webpfallback
+  image_full: https://images.kankaclient.io/user/d_BIk26OLbgbo_snt9kt0kk4174=/smart/src/characters%2FFTqyxYq91PoRb0k1H5wntDl4e6Ii9Ds55e9ntj5h.png?webpfallback
+  image_thumb: https://images.kankaclient.io/user/sFLQv7TmaxBnxJubK3CYVn_5Tvc=/40x40/smart/src/characters%2FFTqyxYq91PoRb0k1H5wntDl4e6Ii9Ds55e9ntj5h.png?webpfallback
   is_private: false
   tags:
   - 191460
@@ -126,8 +126,8 @@
     the terrible storm our first night in Remport. The infection is moving slowly,
     but it is still spreading.</p>
   image: characters/t5ut6IkfjC8rGnUFPDxYoWDEIsPq3YhQtQkcAojt.jpg
-  image_full: https://images.kanka.io/user/uXzj4Fqd2S58FZkR1k85tzRyvLE=/smart/src/characters%2Ft5ut6IkfjC8rGnUFPDxYoWDEIsPq3YhQtQkcAojt.jpg?webpfallback
-  image_thumb: https://images.kanka.io/user/MBr2q0viUiS4cuR5syOvrHvicJA=/40x40/smart/src/characters%2Ft5ut6IkfjC8rGnUFPDxYoWDEIsPq3YhQtQkcAojt.jpg?webpfallback
+  image_full: https://images.kankaclient.io/user/uXzj4Fqd2S58FZkR1k85tzRyvLE=/smart/src/characters%2Ft5ut6IkfjC8rGnUFPDxYoWDEIsPq3YhQtQkcAojt.jpg?webpfallback
+  image_thumb: https://images.kankaclient.io/user/MBr2q0viUiS4cuR5syOvrHvicJA=/40x40/smart/src/characters%2Ft5ut6IkfjC8rGnUFPDxYoWDEIsPq3YhQtQkcAojt.jpg?webpfallback
   is_private: false
   tags:
   - 191460
@@ -145,8 +145,8 @@
   entry: <p>Located of the shore of Remport. Finds the eels to be slimy.</p>
   entry_parsed: <p>Located of the shore of Remport. Finds the eels to be slimy.</p>
   image: characters/oJvibyUobpr85KvieMojvYUjJLrRji6DfnSF4jFD.jpg
-  image_full: https://images.kanka.io/user/-YyPTwF0SzIz-VawZqLoT9MNqYU=/smart/src/characters%2FoJvibyUobpr85KvieMojvYUjJLrRji6DfnSF4jFD.jpg?webpfallback
-  image_thumb: https://images.kanka.io/user/s1FiTPWLR3uublZi6oH9G7eIbl4=/40x40/smart/src/characters%2FoJvibyUobpr85KvieMojvYUjJLrRji6DfnSF4jFD.jpg?webpfallback
+  image_full: https://images.kankaclient.io/user/-YyPTwF0SzIz-VawZqLoT9MNqYU=/smart/src/characters%2FoJvibyUobpr85KvieMojvYUjJLrRji6DfnSF4jFD.jpg?webpfallback
+  image_thumb: https://images.kankaclient.io/user/s1FiTPWLR3uublZi6oH9G7eIbl4=/40x40/smart/src/characters%2FoJvibyUobpr85KvieMojvYUjJLrRji6DfnSF4jFD.jpg?webpfallback
   is_private: false
   title: Gang Leader
   type: NPC Sea Creature
@@ -161,8 +161,8 @@
     MILF<br /><br />Has a super cool swivel arm thing that stirs and carries drinks
     for her.</p><p><br /></p><p>STRAPPED</p>
   image: characters/621d99cd03cd7_3337ccaed1cf18ef60fc.jpeg
-  image_full: https://images.kanka.io/user/NpNoAuEx78DbigSD8dPi32E5Ooo=/smart/src/characters%2F621d99cd03cd7_3337ccaed1cf18ef60fc.jpeg?webpfallback
-  image_thumb: https://images.kanka.io/user/2y64FisFfzWXtVcAZmaVAcy47u8=/40x40/smart/src/characters%2F621d99cd03cd7_3337ccaed1cf18ef60fc.jpeg?webpfallback
+  image_full: https://images.kankaclient.io/user/NpNoAuEx78DbigSD8dPi32E5Ooo=/smart/src/characters%2F621d99cd03cd7_3337ccaed1cf18ef60fc.jpeg?webpfallback
+  image_thumb: https://images.kankaclient.io/user/2y64FisFfzWXtVcAZmaVAcy47u8=/40x40/smart/src/characters%2F621d99cd03cd7_3337ccaed1cf18ef60fc.jpeg?webpfallback
   is_private: false
   tags:
   - 191460
@@ -182,8 +182,8 @@
   entry_parsed: <p>Wearing fine robes with a strong build, our first contact for Lord
     Sylas Briarborn</p>
   image: characters/621d86cc6815c_tavson-of-briarbornj.jpeg
-  image_full: https://images.kanka.io/user/5L_VaVfzADLXYvjWMgNMriS8G6w=/smart/src/characters%2F621d86cc6815c_tavson-of-briarbornj.jpeg?webpfallback
-  image_thumb: https://images.kanka.io/user/j_OTP3UsZpclPeejkZa_DB6deDw=/40x40/smart/src/characters%2F621d86cc6815c_tavson-of-briarbornj.jpeg?webpfallback
+  image_full: https://images.kankaclient.io/user/5L_VaVfzADLXYvjWMgNMriS8G6w=/smart/src/characters%2F621d86cc6815c_tavson-of-briarbornj.jpeg?webpfallback
+  image_thumb: https://images.kankaclient.io/user/j_OTP3UsZpclPeejkZa_DB6deDw=/40x40/smart/src/characters%2F621d86cc6815c_tavson-of-briarbornj.jpeg?webpfallback
   is_private: false
   tags:
   - 196317
@@ -200,8 +200,8 @@
   entry: <p>Sickly Lord Sylas Briarborn of Remport. Totally a vampire.</p>
   entry_parsed: <p>Sickly Lord Sylas Briarborn of Remport. Totally a vampire.</p>
   image: characters/OEkOgmodY6H6ZEP5EiNQVyRfdyoYArIyZCSxprjp.png
-  image_full: https://images.kanka.io/user/_rl2TXvpdctZvGWFi4oLJxrijlU=/smart/src/characters%2FOEkOgmodY6H6ZEP5EiNQVyRfdyoYArIyZCSxprjp.png?webpfallback
-  image_thumb: https://images.kanka.io/user/qJvxftZLNiWv8qmywwYRG1Sk69Y=/40x40/smart/src/characters%2FOEkOgmodY6H6ZEP5EiNQVyRfdyoYArIyZCSxprjp.png?webpfallback
+  image_full: https://images.kankaclient.io/user/_rl2TXvpdctZvGWFi4oLJxrijlU=/smart/src/characters%2FOEkOgmodY6H6ZEP5EiNQVyRfdyoYArIyZCSxprjp.png?webpfallback
+  image_thumb: https://images.kankaclient.io/user/qJvxftZLNiWv8qmywwYRG1Sk69Y=/40x40/smart/src/characters%2FOEkOgmodY6H6ZEP5EiNQVyRfdyoYArIyZCSxprjp.png?webpfallback
   is_private: false
   tags:
   - 197694
@@ -216,7 +216,7 @@
   is_personality_visible: true
 ######################################################################################################################################
 - name: Lisa
-  image_thumb: https://kanka.io/images/defaults/characters_thumb.jpg
+  image_thumb: https://kankaclient.io/images/defaults/characters_thumb.jpg
   is_private: false
   title: Head May Fall Off
   type: NPC
@@ -224,7 +224,7 @@
   is_personality_visible: true
 ######################################################################################################################################
 - name: Rhygar(?)
-  image_thumb: https://kanka.io/images/defaults/characters_thumb.jpg
+  image_thumb: https://kankaclient.io/images/defaults/characters_thumb.jpg
   is_private: false
   title: Sick
   type: NPC
@@ -237,8 +237,8 @@
   entry_parsed: <p>Wife to Lord Sylas Briarborn.</p><p><br /></p><p>Appears to work
     in a lab.</p>
   image: characters/8lYIyYYP2A3oeo9CbeoGDpbhbVYadUNlTNvGyf6v.png
-  image_full: https://images.kanka.io/user/199HjDQdSHUanqLH3_WEQih_kYs=/smart/src/characters%2F8lYIyYYP2A3oeo9CbeoGDpbhbVYadUNlTNvGyf6v.png?webpfallback
-  image_thumb: https://images.kanka.io/user/2LNdMrDW9yxQMuJGe2YMY3fj7rQ=/40x40/smart/src/characters%2F8lYIyYYP2A3oeo9CbeoGDpbhbVYadUNlTNvGyf6v.png?webpfallback
+  image_full: https://images.kankaclient.io/user/199HjDQdSHUanqLH3_WEQih_kYs=/smart/src/characters%2F8lYIyYYP2A3oeo9CbeoGDpbhbVYadUNlTNvGyf6v.png?webpfallback
+  image_thumb: https://images.kankaclient.io/user/2LNdMrDW9yxQMuJGe2YMY3fj7rQ=/40x40/smart/src/characters%2F8lYIyYYP2A3oeo9CbeoGDpbhbVYadUNlTNvGyf6v.png?webpfallback
   is_private: false
   type: NPC
   location_id: 631978
@@ -253,7 +253,7 @@
   entry_parsed: <p>The niece to Lord Sylas Briarborn. Assisted Captain Olivia Marlow
     to the trip across the West. Presumed dead by Sylas Briarborn after 9 months of
     no contact.</p>
-  image_thumb: https://kanka.io/images/defaults/characters_thumb.jpg
+  image_thumb: https://kankaclient.io/images/defaults/characters_thumb.jpg
   is_private: false
   type: NPC
   is_dead: false
@@ -267,7 +267,7 @@
     Last message was 9 months ago through the "artifact" and was worried about the
     ancient waters. Presumed dead by Sylas Briarborn.</p><p><br /></p><p>Has a past
     with Umari.</p>
-  image_thumb: https://kanka.io/images/defaults/characters_thumb.jpg
+  image_thumb: https://kankaclient.io/images/defaults/characters_thumb.jpg
   is_private: false
   title: Captain
   type: NPC
@@ -279,7 +279,7 @@
     for 9 months and presumed dead.</p>
   entry_parsed: <p>The Beastographer for Sylas Briarborn's expedition to the west.
     Lost contact for 9 months and presumed dead.</p>
-  image_thumb: https://kanka.io/images/defaults/characters_thumb.jpg
+  image_thumb: https://kankaclient.io/images/defaults/characters_thumb.jpg
   is_private: false
   title: Beastographer
   type: NPC

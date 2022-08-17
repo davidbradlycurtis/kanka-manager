@@ -1,7 +1,6 @@
 """ Application Configuration """
 
 import logging
-import os
 ##################################################
 #
 # logging configs
@@ -18,6 +17,7 @@ PUT = 'PUT'
 PATCH = 'PATCH'
 DELETE = 'DELETE'
 
+# TODO: Re-work this input mapping
 ENTITY_FORMAT = {
     'campaign': 'campaings',
     'campaigns': 'campaings',
@@ -74,7 +74,7 @@ campaign: {campaign}
 # The folder/directory where to store campaign entities
 campaign_dir: {campaign_dir}
 
-# The campaign API token (https://kanka.io/en/api-docs/1.0/setup)
+# The campaign API token (https://kankaclient.io/en/api-docs/1.0/setup)
 token: {token}
 
 # Whether to throttle API requests (recommended for none boosted campaigns)

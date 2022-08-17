@@ -16,12 +16,11 @@ requirements = [
 ]
 
 setup(
-    name='kanka_manager',
+    name='KankaManager',
     version='1.0.0',
     description="Package to manage Kanka campaigns",
     author="David Curtis",
-    packages=[p for p in find_packages() if p.startswith('kanka_manager')],
-    package_data={},
-    include_package_data=False,
+    packages=find_packages(where="src"),
+    package_dir={"": "src"},
     install_requires=requirements,
 )

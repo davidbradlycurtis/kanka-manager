@@ -80,6 +80,12 @@ class KankaClient(BaseManager):
 
         self.logger.debug('Kanka Client initialized')
 
+    # def smart_substitute(self, entity, entities):
+    #     self.tags.get_all()
+    #     tags = self.tags.tag_map
+    #     self.entities.get(entity)._substitute_tags(tags)
+    #     pass
+
 
     def get(self, entity: str, name_or_id: str or int) -> dict:
         """
@@ -153,10 +159,3 @@ class KankaClient(BaseManager):
         """
         result = self.entities.get(entity).delete(name_or_id)
         return result
-
-    # def smart_substitute(self, entities):
-    #     for attribute in SUBSTITUTION_LIST:
-    #         if hasattr(entities[0], attribute)
-    #     for entity in entities:
-
-    #     pass

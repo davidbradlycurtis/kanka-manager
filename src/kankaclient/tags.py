@@ -7,9 +7,29 @@ from __future__ import absolute_import
 
 import logging
 import json
+from dataclasses import dataclass
+from typing import Any, Optional
+
+from dacite import from_dict
 
 from kankaclient.constants import BASE_URL, GET, POST, DELETE, PUT
-from kankaclient.base import BaseManager
+from kankaclient.base import BaseManager, Entity
+
+
+@dataclass
+class Tag(Entity):
+
+    entry: Optional[Any]
+    image: Optional[Any]
+    image_full: Optional[Any]
+    image_thumb: Optional[Any]
+    has_custom_image: bool
+    entity_id: int
+    colour: Optional[str]
+    tag_id: Optional[Any]
+    entities: list
+    is_auto_applied: bool
+
 
 class TagAPI(BaseManager):
     """Kanka Tag API"""
@@ -23,6 +43,7 @@ class TagAPI(BaseManager):
         self.campaign = campaign
         self.campaign_id = campaign.id
         self.tags = list()
+        self.tag_map = dict()
 
         global GET_ALL_CREATE_SINGLE
         global GET_UPDATE_DELETE_SINGLE
@@ -46,17 +67,26 @@ class TagAPI(BaseManager):
         if self.tags:
             return self.tags
 
-        tags = list()
         response = self._request(url=GET_ALL_CREATE_SINGLE, request=GET)
 
         if not response.ok:
-            self.logger.error('Failed to retrieve tags from campaign %s', self.campaign.get('name'))
-            raise self.KankaException(response.text, response.status_code, message=response.reason)
+            self.logger.error(
+                "Failed to retrieve tags from campaign %s",
+                self.campaign.name,
+            )
+            raise self.KankaException(
+                response.text, response.status_code, message=response.reason
+            )
 
-        tags = json.loads(response.text).get('data')
         self.logger.debug(response.json())
+        if response.text:
+            self.tags = [
+                from_dict(data_class=Tag, data=tag) for tag in json.loads(response.text).get("data")
+            ]
+            for tag in self.tags:
+                self.tag_map.update({tag.id: tag.name})
 
-        return tags
+        return self.tags
 
 
     def get(self, name_or_id: str or int) -> dict:
@@ -73,22 +103,26 @@ class TagAPI(BaseManager):
             tag: the requested tag
         """
         tag = None
-        if type(name_or_id) is int:
+        if isinstance(name_or_id, int):
             tag = self.get_tag_by_id(name_or_id)
         else:
-            tags = self.get()
+            tags = self.get_all()
             for _tag in tags:
-                if _tag.get('name') == name_or_id:
+                if _tag.name == name_or_id:
                     tag = _tag
                     break
 
         if tag is None:
-            raise self.KankaException(reason=f'Tag not found: {name_or_id}', code=404, message='Not Found')
+            raise self.raise_exception(
+                reason=f"Tag not found: {name_or_id}",
+                code=404,
+                message="Not Found",
+            )
 
         return tag
 
 
-    def get_tag_by_id(self, id: int) -> dict:
+    def get_tag_by_id(self, id: int) -> Tag:
         """
         Retrieves the requested tag from Kanka
 
@@ -104,13 +138,19 @@ class TagAPI(BaseManager):
         response = self._request(url=GET_UPDATE_DELETE_SINGLE % id, request=GET)
 
         if not response.ok:
-            self.logger.error('Failed to retrieve tag %s from campaign %s', id, self.campaign.get('name'))
-            raise self.KankaException(response.text, response.status_code, message=response.reason)
+            self.logger.error(
+                "Failed to retrieve tag %s from campaign %s",
+                id,
+                self.campaign.name,
+            )
+            raise self.KankaException(
+                response.text, response.status_code, message=response.reason
+            )
 
-        tag = json.loads(response.text).get('data')
+        tag = json.loads(response.text).get("data")
         self.logger.debug(response.json())
 
-        return tag
+        return from_dict(data_class=Tag, data=tag)
 
 
     def create(self, tag: dict) -> dict:

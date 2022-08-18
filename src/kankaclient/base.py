@@ -28,7 +28,7 @@ class Entity:
 
     id: int
     name: str
-    type: str
+    type: Optional[Any]
     tags: list
     is_private: bool
     tooltip: Any

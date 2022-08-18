@@ -56,6 +56,7 @@ class CampaignAPI(BaseManager):
         self.logger = logging.getLogger(self.__class__.__name__)
         self.campaigns = list()
         self.members = list()
+        self.member_map = dict()
 
         self.campaign = self.get(campaign)
         campaign_id = self.campaign.id
@@ -181,5 +182,7 @@ class CampaignAPI(BaseManager):
             self.members = [
                 from_dict(data_class=Member, data=member) for member in json.loads(response.text).get('data')
             ]
+            for member in self.members:
+                self.member_map.update({member.id: member.name})
 
         return self.members

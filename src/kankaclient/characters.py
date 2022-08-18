@@ -253,3 +253,14 @@ class CharacterAPI(BaseManager):
 
         self.logger.debug(response)
         return True
+
+
+    # def _substitute_tags(self, tags):
+    #     if not self.characters:
+    #         self.get_all()
+    #     for character in self.characters:
+    #         if character.tags:
+    #             new_tags = []
+    #             for tag in character.tags:
+    #                 new_tags.append(tags.get(tag))
+    #             character.tags = new_tags

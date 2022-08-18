@@ -37,6 +37,12 @@ class Campaign:
     superboosted: bool
     members: Optional[Any]
 
+@dataclass
+class Member:
+
+    id: int
+    name: str
+    avatar: Optional[Any]
 
 class CampaignAPI(BaseManager):
     """Kanka Campaign API"""
@@ -138,7 +144,7 @@ class CampaignAPI(BaseManager):
         if not response.ok:
             self.logger.error(
                 "Failed to retrieve campaign %s",
-                id,
+                id
             )
             raise self.KankaException(
                 response.text, response.status_code, message=response.reason
@@ -163,13 +169,17 @@ class CampaignAPI(BaseManager):
         if self.members:
             return self.members
 
-        response = self._request(url=self.GET_MEMBERS, request=GET)
+        response = self._request(url=GET_MEMBERS, request=GET)
 
         if not response.ok:
-            self.logger.error('Failed to retrieve members from campaign: ', self.campaign.get('name'))
+            self.logger.error('Failed to retrieve members from campaign: ', self.campaign.name)
             raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         self.members = json.loads(response.text).get('data')
         self.logger.debug(response)
+        if response.text:
+            self.members = [
+                from_dict(data_class=Member, data=member) for member in json.loads(response.text).get('data')
+            ]
 
         return self.members

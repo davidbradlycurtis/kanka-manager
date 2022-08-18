@@ -10,6 +10,7 @@ from prettytable import PrettyTable
 from kankaclient.constants import (
     LOG_FORMAT,
     LOG_DATE_FORMAT,
+    DEFAULT_FIELDS
 )
 # ---------------------------------------------------------------------------
 
@@ -58,13 +59,14 @@ def read_data(file):
 
 def stamp(entities, args):
     #TODO Finish
-    columns = ['Name']
+    columns = ['Name', 'ID', 'Type', 'Tags']
     if args.fields:
         columns.extend(args.fields)
     table = PrettyTable(columns)
     for entity in entities:
-        row = [entity.name]
+        row = [entity.name, entity.id, entity.type, entity.tags]
         for arg in args.fields:
             row.append(getattr(entity, arg))
         table.add_row(row)
     print(table)
+    print(entities)

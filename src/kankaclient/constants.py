@@ -57,6 +57,21 @@ ENTITY_FORMAT = {
     'tags': 'tags'
 }
 
+SUBSTITUTION_LIST = [
+    'tags',
+    'created_by',
+    'updated_by',
+    'location_id',
+    'races'
+]
+
+DEFAULT_FIELDS = [
+    'Name',
+    'ID',
+    'Type',
+    'Tags'
+]
+
 CONFIG = 'config'
 
 CONFIG_FIELDS = {

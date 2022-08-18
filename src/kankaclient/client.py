@@ -153,3 +153,10 @@ class KankaClient(BaseManager):
         """
         result = self.entities.get(entity).delete(name_or_id)
         return result
+
+    # def smart_substitute(self, entities):
+    #     for attribute in SUBSTITUTION_LIST:
+    #         if hasattr(entities[0], attribute)
+    #     for entity in entities:
+
+    #     pass

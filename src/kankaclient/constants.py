@@ -115,6 +115,7 @@ COMMANDS = [
 OUTPUT_OPTIONS = [
     'yaml',
     'json',
+    'table'
 ]
 
 ENTITIES = [

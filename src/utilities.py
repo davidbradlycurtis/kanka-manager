@@ -4,6 +4,7 @@
 """ Contains program utility functions"""
 # ---------------------------------------------------------------------------
 import os
+import json
 import yaml
 import logging
 from prettytable import PrettyTable
@@ -59,14 +60,22 @@ def read_data(file):
 
 def stamp(entities, args):
     #TODO Finish
-    columns = ['Name', 'ID', 'Type', 'Tags']
-    if args.fields:
-        columns.extend(args.fields)
-    table = PrettyTable(columns)
-    for entity in entities:
-        row = [entity.name, entity.id, entity.type, entity.tags]
-        for arg in args.fields:
-            row.append(getattr(entity, arg))
-        table.add_row(row)
-    print(table)
-    print(entities)
+    if args.output == 'yaml':
+        for entity in entities:
+            yml = yaml.safe_dump(entity._asdict())
+            print(yml)
+    elif args.output == 'json':
+        for entity in entities:
+            js = json.dump(entity._asdict(), )
+            print(js)
+    elif args.output == 'table':
+        columns = ['Name', 'ID', 'Type', 'Tags']
+        if args.fields:
+            columns.extend(args.fields)
+        table = PrettyTable(columns)
+        for entity in entities:
+            row = [entity.name, entity.id, entity.type, entity.tags]
+            for arg in args.fields:
+                row.append(getattr(entity, arg))
+            table.add_row(row)
+        print(table)

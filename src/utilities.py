@@ -59,14 +59,14 @@ def read_data(file):
 
 
 def stamp(entities, args):
-    #TODO Finish
+    #TODO Re-optimize
     if args.output == 'yaml':
         for entity in entities:
             yml = yaml.safe_dump(entity._asdict())
             print(yml)
     elif args.output == 'json':
         for entity in entities:
-            js = json.dump(entity._asdict(), )
+            js = json.dumps(entity._asdict(), indent = 4)
             print(js)
     elif args.output == 'table':
         columns = ['Name', 'ID', 'Type', 'Tags']

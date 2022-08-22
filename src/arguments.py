@@ -30,12 +30,16 @@ def get_parser():
 
     parser_create = subparsers.add_parser('create', help='TODO')
     parser_create.add_argument('entity', action='store', type=str, help='TODO')
+    parser_create.add_argument('-n', '--name', action='store', type=str, help='TODO')
+    parser_create.add_argument('-f', '--file', action='store', type=str, help='TODO')
+    parser_create.add_argument('-p', '--parameters', action='store', type=str, default=[], nargs='*', help='TODO')
 
     parser_update = subparsers.add_parser('update', help='TODO')
     parser_update.add_argument('entity', action='store', type=str, help='TODO')
 
     parser_delete = subparsers.add_parser('delete', help='TODO')
     parser_delete.add_argument('entity', action='store', type=str, help='TODO')
+    parser_delete.add_argument('-n', '--name', action='store', dest='entities', type=str, nargs='+', help='TODO')
 
     parser_pull = subparsers.add_parser('pull', help='TODO')
 
@@ -49,5 +53,14 @@ def get_parser():
 
     if hasattr(args, 'entity'):
         setattr(args, 'entity', ENTITY_FORMAT.get(args.entity, 'None'))
+    if args.parameters:
+        parameters = {}
+        for _p in args.parameters:
+            if '=' in _p:
+                _p = _p.split('=')
+                parameters[_p[0]] = _p[1]
+        setattr(args, 'parameters', parameters)
+
+    print()
 
     return args

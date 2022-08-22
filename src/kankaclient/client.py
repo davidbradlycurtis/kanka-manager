@@ -127,8 +127,7 @@ class KankaClient(BaseManager):
         Returns:
             dict: _description_
         """
-        result = self.entities.get(entity).create(data)
-        return result
+        return self.entities.get(entity).create(data)
 
 
     def update(self, entity: str, data: dict or Entity) -> dict:

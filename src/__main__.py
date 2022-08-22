@@ -12,6 +12,7 @@ import logging
 from arguments import get_parser
 from cli.config import config, read_config
 from cli.get import get
+from cli.delete import delete
 from utilities import get_logger
 from kankaclient.constants import CONFIG
 from kankaclient.client import KankaClient
@@ -31,7 +32,7 @@ def init(args):
 commands = {
     "config": config,
     #TODO"create": create,
-    #TODO"delete": delete,
+    "delete": delete,
     "get": get,
     #TODO"push": push,
     #TODO"pull": pull,

@@ -170,7 +170,7 @@ class DiceRollAPI(BaseManager):
         dice_roll = json.loads(response.text).get('data')
         self.logger.debug(response.json())
 
-        return dice_roll
+        return from_dict(data_class=DiceRoll, data=dice_roll)
 
 
     def update(self, dice_roll: dict) -> dict:

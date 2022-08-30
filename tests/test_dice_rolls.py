@@ -19,6 +19,6 @@ class TestDiceRolls(TestCase):
         self.assertEqual(self.client.get('dice', 'test_dice_roll').name, 'test_dice_roll')
 
     def test_create_and_delete_dice_roll(self):
-        dice_roll = self.client.create('dice', {'name': self.dice_name})
+        dice_roll = self.client.create('dice', {'name': self.dice_name, 'parameters': '3d6'})
         self.assertIsNotNone(dice_roll)
         self.assertTrue(self.client.delete('dice', dice_roll.id))

@@ -53,7 +53,7 @@ def get_parser():
 
     if hasattr(args, 'entity'):
         setattr(args, 'entity', ENTITY_FORMAT.get(args.entity, 'None'))
-    if args.parameters:
+    if hasattr(args, 'parameters'):
         parameters = {}
         for _p in args.parameters:
             if '=' in _p:

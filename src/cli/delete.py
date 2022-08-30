@@ -3,7 +3,6 @@
 #----------------------------------------------------------------------------
 """ Details about the module and for what purpose it was built for"""
 # ---------------------------------------------------------------------------
-from kankaclient.base import KankaException
 from utilities import get_logger
 
 LOGGER = get_logger()
@@ -13,7 +12,7 @@ def delete(client, args):
         for entity in args.entities:
             if entity:
                 client.delete(args.entity, entity)
-    except KankaException as ex:
+    except Exception as ex:
         LOGGER.debug(ex)
         return False
 

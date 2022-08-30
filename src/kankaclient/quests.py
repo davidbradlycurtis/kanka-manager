@@ -7,9 +7,28 @@ from __future__ import absolute_import
 
 import logging
 import json
+from dataclasses import dataclass
+from typing import Any, Optional
+
+from dacite import from_dict
 
 from kankaclient.constants import BASE_URL, GET, POST, DELETE, PUT
-from kankaclient.base import BaseManager
+from kankaclient.base import BaseManager, Entity
+
+
+@dataclass
+class Quest(Entity):
+
+    entry: Optional[Any]
+    image: Optional[Any]
+    image_full: Optional[Any]
+    image_thumb: Optional[Any]
+    has_custom_image: Optional[Any]
+    is_private: bool
+    entity_id: int
+    date: Optional[str]
+    quest_id: Optional[int]
+    elements: Optional[list]
 
 class QuestAPI(BaseManager):
     """Kanka Quest API"""
@@ -46,17 +65,24 @@ class QuestAPI(BaseManager):
         if self.quests:
             return self.quests
 
-        quests = list()
         response = self._request(url=GET_ALL_CREATE_SINGLE, request=GET)
 
         if not response.ok:
-            self.logger.error('Failed to retrieve quests from campaign %s', self.campaign.get('name'))
-            raise self.KankaException(response.text, response.status_code, message=response.reason)
+            self.logger.error(
+                "Failed to retrieve quests from campaign %s",
+                self.campaign.name,
+            )
+            raise self.KankaException(
+                response.text, response.status_code, message=response.reason
+            )
 
-        quests = json.loads(response.text).get('data')
         self.logger.debug(response.json())
+        if response.text:
+            self.quests = [
+                from_dict(data_class=Quest, data=quest) for quest in json.loads(response.text).get("data")
+            ]
 
-        return quests
+        return self.quests
 
 
     def get(self, name_or_id: str or int) -> dict:
@@ -73,22 +99,26 @@ class QuestAPI(BaseManager):
             quest: the requested quest
         """
         quest = None
-        if type(name_or_id) is int:
+        if isinstance(name_or_id, int):
             quest = self.get_quest_by_id(name_or_id)
         else:
-            quests = self.get()
+            quests = self.get_all()
             for _quest in quests:
-                if _quest.get('name') == name_or_id:
+                if _quest.name == name_or_id:
                     quest = _quest
                     break
 
         if quest is None:
-            raise self.KankaException(reason=f'Quest not found: {name_or_id}', code=404, message='Not Found')
+            raise self.raise_exception(
+                reason=f"quest not found: {name_or_id}",
+                code=404,
+                message="Not Found",
+            )
 
         return quest
 
 
-    def get_quest_by_id(self, id: int) -> dict:
+    def get_quest_by_id(self, id: int) -> Quest:
         """
         Retrieves the requested quest from Kanka
 
@@ -104,16 +134,22 @@ class QuestAPI(BaseManager):
         response = self._request(url=GET_UPDATE_DELETE_SINGLE % id, request=GET)
 
         if not response.ok:
-            self.logger.error('Failed to retrieve quest %s from campaign %s', id, self.campaign.get('name'))
-            raise self.KankaException(response.text, response.status_code, message=response.reason)
+            self.logger.error(
+                "Failed to retrieve quest %s from campaign %s",
+                id,
+                self.campaign.name,
+            )
+            raise self.KankaException(
+                response.text, response.status_code, message=response.reason
+            )
 
-        quest = json.loads(response.text).get('data')
+        quest = json.loads(response.text).get("data")
         self.logger.debug(response.json())
 
-        return quest
+        return from_dict(data_class=Quest, data=quest)
 
 
-    def create(self, quest: dict) -> dict:
+    def create(self, quest: dict) -> Quest:
         """
         Creates the provided quest in Kanka
 
@@ -126,16 +162,24 @@ class QuestAPI(BaseManager):
         Returns:
             quest: the created quest
         """
-        response = self._request(url=GET_ALL_CREATE_SINGLE, request=POST, data=json.dumps(quest))
+        response = self._request(
+            url=GET_ALL_CREATE_SINGLE, request=POST, data=json.dumps(quest)
+        )
 
         if not response.ok:
-            self.logger.error('Failed to create quest %s in campaign %s', quest.get('name', 'None'), self.campaign.get('name'))
-            raise self.KankaException(response.text, response.status_code, message=response.reason)
+            self.logger.error(
+                "Failed to create quest %s in campaign %s",
+                quest.get("name", "None"),
+                self.campaign.name,
+            )
+            raise self.KankaException(
+                response.text, response.status_code, message=response.reason
+            )
 
-        quest = json.loads(response.text).get('data')
+        quest = json.loads(response.text).get("data")
         self.logger.debug(response.json())
 
-        return quest
+        return from_dict(data_class=Quest, data=quest)
 
 
     def update(self, quest: dict) -> dict:

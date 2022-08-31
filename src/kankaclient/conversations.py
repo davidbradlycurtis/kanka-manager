@@ -7,9 +7,30 @@ from __future__ import absolute_import
 
 import logging
 import json
+from dataclasses import dataclass
+from typing import Any, Optional
+
+from dacite import from_dict
 
 from kankaclient.constants import BASE_URL, GET, POST, DELETE, PUT
-from kankaclient.base import BaseManager
+from kankaclient.base import BaseManager, Entity
+
+
+@dataclass
+class Conversation(Entity):
+
+    entry: Optional[Any]
+    image: Optional[Any]
+    image_full: Optional[Any]
+    image_thumb: Optional[Any]
+    has_custom_image: bool
+    is_closed: int
+    entity_id: int
+    is_private: bool
+    target: str
+    target_id: int
+    participants: int
+    messages: int
 
 class ConversationAPI(BaseManager):
     """Kanka Conversation API"""
@@ -17,8 +38,8 @@ class ConversationAPI(BaseManager):
     GET_ALL_CREATE_SINGLE: str
     GET_UPDATE_DELETE_SINGLE: str
 
-    def __init__(self, token, campaign, verbose=False):
-        super().__init__(token=token, verbose=verbose)
+    def __init__(self, token, campaign, verbose=False, throttle=False):
+        super().__init__(token=token, verbose=verbose, throttle=throttle)
         self.logger = logging.getLogger(self.__class__.__name__)
         self.campaign = campaign
         self.campaign_id = campaign.id
@@ -46,17 +67,24 @@ class ConversationAPI(BaseManager):
         if self.conversations:
             return self.conversations
 
-        conversations = list()
         response = self._request(url=GET_ALL_CREATE_SINGLE, request=GET)
 
         if not response.ok:
-            self.logger.error('Failed to retrieve conversations from campaign %s', self.campaign.get('name'))
-            raise self.KankaException(response.text, response.status_code, message=response.reason)
+            self.logger.error(
+                "Failed to retrieve conversations from campaign %s",
+                self.campaign.name,
+            )
+            raise self.KankaException(
+                response.text, response.status_code, message=response.reason
+            )
 
-        conversations = json.loads(response.text).get('data')
         self.logger.debug(response.json())
+        if response.text:
+            self.conversations = [
+                from_dict(data_class=Conversation, data=conversation) for conversation in json.loads(response.text).get("data")
+            ]
 
-        return conversations
+        return self.conversations
 
 
     def get(self, name_or_id: str or int) -> dict:
@@ -73,22 +101,26 @@ class ConversationAPI(BaseManager):
             conversation: the requested conversation
         """
         conversation = None
-        if type(name_or_id) is int:
+        if isinstance(name_or_id, int):
             conversation = self.get_conversation_by_id(name_or_id)
         else:
-            conversations = self.get()
+            conversations = self.get_all()
             for _conversation in conversations:
-                if _conversation.get('name') == name_or_id:
+                if _conversation.name == name_or_id:
                     conversation = _conversation
                     break
 
         if conversation is None:
-            raise self.KankaException(reason=f'Conversation not found: {name_or_id}', code=404, message='Not Found')
+            raise self.raise_exception(
+                reason=f"conversation not found: {name_or_id}",
+                code=404,
+                message="Not Found",
+            )
 
         return conversation
 
 
-    def get_conversation_by_id(self, id: int) -> dict:
+    def get_conversation_by_id(self, id: int) -> Conversation:
         """
         Retrieves the requested conversation from Kanka
 
@@ -104,16 +136,22 @@ class ConversationAPI(BaseManager):
         response = self._request(url=GET_UPDATE_DELETE_SINGLE % id, request=GET)
 
         if not response.ok:
-            self.logger.error('Failed to retrieve conversation %s from campaign %s', id, self.campaign.get('name'))
-            raise self.KankaException(response.text, response.status_code, message=response.reason)
+            self.logger.error(
+                "Failed to retrieve conversation %s from campaign %s",
+                id,
+                self.campaign.name,
+            )
+            raise self.KankaException(
+                response.text, response.status_code, message=response.reason
+            )
 
-        conversation = json.loads(response.text).get('data')
+        conversation = json.loads(response.text).get("data")
         self.logger.debug(response.json())
 
-        return conversation
+        return from_dict(data_class=Conversation, data=conversation)
 
 
-    def create(self, conversation: dict) -> dict:
+    def create(self, conversation: dict) -> Conversation:
         """
         Creates the provided conversation in Kanka
 
@@ -126,16 +164,24 @@ class ConversationAPI(BaseManager):
         Returns:
             conversation: the created conversation
         """
-        response = self._request(url=GET_ALL_CREATE_SINGLE, request=POST, data=json.dumps(conversation))
+        response = self._request(
+            url=GET_ALL_CREATE_SINGLE, request=POST, data=json.dumps(conversation)
+        )
 
         if not response.ok:
-            self.logger.error('Failed to create conversation %s in campaign %s', conversation.get('name', 'None'), self.campaign.get('name'))
-            raise self.KankaException(response.text, response.status_code, message=response.reason)
+            self.logger.error(
+                "Failed to create conversation %s in campaign %s",
+                conversation.get("name", "None"),
+                self.campaign.name,
+            )
+            raise self.KankaException(
+                response.text, response.status_code, message=response.reason
+            )
 
-        conversation = json.loads(response.text).get('data')
+        conversation = json.loads(response.text).get("data")
         self.logger.debug(response.json())
 
-        return conversation
+        return from_dict(data_class=Conversation, data=conversation)
 
 
     def update(self, conversation: dict) -> dict:
@@ -179,7 +225,7 @@ class ConversationAPI(BaseManager):
         response = self._request(url=GET_UPDATE_DELETE_SINGLE % id, request=DELETE)
 
         if not response.ok:
-            self.logger.error('Failed to delete conversation %s in campaign %s', id, self.campaign.get('name'))
+            self.logger.error('Failed to delete conversation %s in campaign %s', id, self.campaign.name)
             raise self.KankaException(response.text, response.status_code, message=response.reason)
 
         self.logger.debug(response)

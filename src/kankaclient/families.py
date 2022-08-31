@@ -17,8 +17,8 @@ class FamilyAPI(BaseManager):
     GET_ALL_CREATE_SINGLE: str
     GET_UPDATE_DELETE_SINGLE: str
 
-    def __init__(self, token, campaign, verbose=False):
-        super().__init__(token=token, verbose=verbose)
+    def __init__(self, token, campaign, verbose=False, throttle=False):
+        super().__init__(token=token, verbose=verbose, throttle=throttle)
         self.logger = logging.getLogger(self.__class__.__name__)
         self.campaign = campaign
         self.campaign_id = campaign.id

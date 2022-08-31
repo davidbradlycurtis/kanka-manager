@@ -51,8 +51,8 @@ class CampaignAPI(BaseManager):
     GET_SINGLE: str
     GET_MEMBERS: str
 
-    def __init__(self, token, campaign, verbose=False):
-        super().__init__(token=token, verbose=verbose)
+    def __init__(self, token, campaign, verbose=False, throttle=False):
+        super().__init__(token=token, verbose=verbose, throttle=throttle)
         self.logger = logging.getLogger(self.__class__.__name__)
         self.campaigns = list()
         self.members = list()

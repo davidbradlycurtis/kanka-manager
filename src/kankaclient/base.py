@@ -125,7 +125,7 @@ class BaseManager(object):
         while attempt < max_attemps:
 
             if self.throttle:
-                time.sleep(.5)
+                time.sleep(1)
 
             response = request(**kwargs)
 

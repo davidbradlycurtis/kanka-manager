@@ -149,7 +149,7 @@ class AbilityAPI(BaseManager):
         return from_dict(data_class=Ability, data=ability)
 
 
-    def create(self, ability: dict) -> dict:
+    def create(self, ability: dict) -> Ability:
         """
         Creates the provided ability in Kanka
 
@@ -162,16 +162,24 @@ class AbilityAPI(BaseManager):
         Returns:
             ability: the created ability
         """
-        response = self._request(url=GET_ALL_CREATE_SINGLE, request=POST, data=json.dumps(ability))
+        response = self._request(
+            url=GET_ALL_CREATE_SINGLE, request=POST, data=json.dumps(ability)
+        )
 
         if not response.ok:
-            self.logger.error('Failed to create ability %s in campaign %s', ability.get('name', 'None'), self.campaign.get('name'))
-            raise self.KankaException(response.text, response.status_code, message=response.reason)
+            self.logger.error(
+                "Failed to create ability %s in campaign %s",
+                ability.get("name", "None"),
+                self.campaign.name,
+            )
+            raise self.KankaException(
+                response.text, response.status_code, message=response.reason
+            )
 
-        ability = json.loads(response.text).get('data')
+        ability = json.loads(response.text).get("data")
         self.logger.debug(response.json())
 
-        return ability
+        return from_dict(data_class=Ability, data=ability)
 
 
     def update(self, ability: dict) -> dict:

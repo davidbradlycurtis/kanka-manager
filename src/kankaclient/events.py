@@ -7,9 +7,25 @@ from __future__ import absolute_import
 
 import logging
 import json
+from dataclasses import dataclass
+from typing import Any, Optional
+
+from dacite import from_dict
 
 from kankaclient.constants import BASE_URL, GET, POST, DELETE, PUT
-from kankaclient.base import BaseManager
+from kankaclient.base import BaseManager, Entity
+
+
+@dataclass
+class Event(Entity):
+
+    entry: Optional[Any]
+    image: Optional[Any]
+    image_full: Optional[Any]
+    image_thumb: Optional[Any]
+    has_custom_image: bool
+    entity_id: int
+    date: Optional[Any]
 
 class EventAPI(BaseManager):
     """Kanka Event API"""
@@ -46,17 +62,24 @@ class EventAPI(BaseManager):
         if self.events:
             return self.events
 
-        events = list()
         response = self._request(url=GET_ALL_CREATE_SINGLE, request=GET)
 
         if not response.ok:
-            self.logger.error('Failed to retrieve events from campaign %s', self.campaign.get('name'))
-            raise self.KankaException(response.text, response.status_code, message=response.reason)
+            self.logger.error(
+                "Failed to retrieve events from campaign %s",
+                self.campaign.name,
+            )
+            raise self.KankaException(
+                response.text, response.status_code, message=response.reason
+            )
 
-        events = json.loads(response.text).get('data')
         self.logger.debug(response.json())
+        if response.text:
+            self.events = [
+                from_dict(data_class=Event, data=event) for event in json.loads(response.text).get("data")
+            ]
 
-        return events
+        return self.events
 
 
     def get(self, name_or_id: str or int) -> dict:
@@ -73,22 +96,26 @@ class EventAPI(BaseManager):
             event: the requested event
         """
         event = None
-        if type(name_or_id) is int:
+        if isinstance(name_or_id, int):
             event = self.get_event_by_id(name_or_id)
         else:
-            events = self.get()
+            events = self.get_all()
             for _event in events:
-                if _event.get('name') == name_or_id:
+                if _event.name == name_or_id:
                     event = _event
                     break
 
         if event is None:
-            raise self.KankaException(reason=f'Event not found: {name_or_id}', code=404, message='Not Found')
+            raise self.raise_exception(
+                reason=f"event not found: {name_or_id}",
+                code=404,
+                message="Not Found",
+            )
 
         return event
 
 
-    def get_event_by_id(self, id: int) -> dict:
+    def get_event_by_id(self, id: int) -> Event:
         """
         Retrieves the requested event from Kanka
 
@@ -104,16 +131,22 @@ class EventAPI(BaseManager):
         response = self._request(url=GET_UPDATE_DELETE_SINGLE % id, request=GET)
 
         if not response.ok:
-            self.logger.error('Failed to retrieve event %s from campaign %s', id, self.campaign.get('name'))
-            raise self.KankaException(response.text, response.status_code, message=response.reason)
+            self.logger.error(
+                "Failed to retrieve event %s from campaign %s",
+                id,
+                self.campaign.name,
+            )
+            raise self.KankaException(
+                response.text, response.status_code, message=response.reason
+            )
 
-        event = json.loads(response.text).get('data')
+        event = json.loads(response.text).get("data")
         self.logger.debug(response.json())
 
-        return event
+        return from_dict(data_class=Event, data=event)
 
 
-    def create(self, event: dict) -> dict:
+    def create(self, event: dict) -> Event:
         """
         Creates the provided event in Kanka
 
@@ -126,16 +159,24 @@ class EventAPI(BaseManager):
         Returns:
             event: the created event
         """
-        response = self._request(url=GET_ALL_CREATE_SINGLE, request=POST, data=json.dumps(event))
+        response = self._request(
+            url=GET_ALL_CREATE_SINGLE, request=POST, data=json.dumps(event)
+        )
 
         if not response.ok:
-            self.logger.error('Failed to create event %s in campaign %s', event.get('name', 'None'), self.campaign.get('name'))
-            raise self.KankaException(response.text, response.status_code, message=response.reason)
+            self.logger.error(
+                "Failed to create event %s in campaign %s",
+                event.get("name", "None"),
+                self.campaign.name,
+            )
+            raise self.KankaException(
+                response.text, response.status_code, message=response.reason
+            )
 
-        event = json.loads(response.text).get('data')
+        event = json.loads(response.text).get("data")
         self.logger.debug(response.json())
 
-        return event
+        return from_dict(data_class=Event, data=event)
 
 
     def update(self, event: dict) -> dict:

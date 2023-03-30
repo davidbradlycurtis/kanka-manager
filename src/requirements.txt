@@ -1,0 +1,6 @@
+# TODO: Version lock these packages for each python version
+dacite
+docopt-ng
+prettytable
+requests
+ruamel.yaml

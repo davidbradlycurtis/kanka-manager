@@ -1,11 +1,22 @@
-# Program packages
-dacite==1.6.0
-requests==2.27.1
-prettytable==3.3.0
-Pyyaml==6.0
+# Put all Python modules that are needed *only* for development in here
+-r src/requirements.txt
 
 # Development/Testing packages
-coverage==6.4.3
-pylint==2.12.2
-pytest==6.2.5
-tox==3.25.1
+
+# needed for running tests
+pytest
+pytest-cov
+# Runs tests against multiple versions of Python
+tox
+testfixtures
+
+# coverage through testing
+coverage
+cov-core
+mccabe
+
+# source code cleanup
+pylint
+
+# documentation
+pdoc
